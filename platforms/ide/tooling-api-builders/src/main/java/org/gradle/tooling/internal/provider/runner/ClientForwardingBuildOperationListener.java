@@ -24,7 +24,6 @@ import org.gradle.internal.build.event.types.DefaultFailureResult;
 import org.gradle.internal.build.event.types.DefaultOperationDescriptor;
 import org.gradle.internal.build.event.types.DefaultOperationFinishedProgressEvent;
 import org.gradle.internal.build.event.types.DefaultOperationStartedProgressEvent;
-import org.gradle.internal.build.event.types.DefaultProblemAwareFailure;
 import org.gradle.internal.build.event.types.DefaultSuccessResult;
 import org.gradle.internal.operations.BuildOperationDescriptor;
 import org.gradle.internal.operations.BuildOperationListener;
@@ -84,7 +83,7 @@ class ClientForwardingBuildOperationListener implements BuildOperationListener {
         long endTime = result.getEndTime();
         if (failure != null) {
             if (problemsForThrowables != null) {
-                InternalFailure rootFailure = DefaultProblemAwareFailure.fromThrowable(failure, problemsForThrowables, ProblemsProgressEventConsumer::createDefaultProblemDetails);
+                InternalFailure rootFailure = DefaultFailure.fromThrowable(failure, problemsForThrowables, ProblemsProgressEventConsumer::createDefaultProblemDetails);
                 return new DefaultFailureResult(startTime, endTime, Collections.singletonList(rootFailure));
             } else {
                 return new DefaultFailureResult(startTime, endTime, Collections.singletonList(DefaultFailure.fromThrowable(failure)));

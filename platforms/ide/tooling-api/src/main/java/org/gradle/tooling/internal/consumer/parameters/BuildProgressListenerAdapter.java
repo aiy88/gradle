@@ -152,7 +152,6 @@ import org.gradle.tooling.events.work.internal.DefaultWorkItemStartEvent;
 import org.gradle.tooling.events.work.internal.DefaultWorkItemSuccessResult;
 import org.gradle.tooling.internal.consumer.DefaultFailure;
 import org.gradle.tooling.internal.consumer.DefaultFileComparisonTestAssertionFailure;
-import org.gradle.tooling.internal.consumer.DefaultProblemAwareFailure;
 import org.gradle.tooling.internal.consumer.DefaultTestAssertionFailure;
 import org.gradle.tooling.internal.consumer.DefaultTestFrameworkFailure;
 import org.gradle.tooling.internal.protocol.InternalBasicProblemDetailsVersion3;
@@ -225,7 +224,6 @@ import org.gradle.tooling.internal.protocol.problem.InternalLineInFileLocation;
 import org.gradle.tooling.internal.protocol.problem.InternalLocation;
 import org.gradle.tooling.internal.protocol.problem.InternalOffsetInFileLocation;
 import org.gradle.tooling.internal.protocol.problem.InternalPluginIdLocation;
-import org.gradle.tooling.internal.protocol.problem.InternalProblemAwareFailure;
 import org.gradle.tooling.internal.protocol.problem.InternalProblemCategory;
 import org.gradle.tooling.internal.protocol.problem.InternalProblemDetailsVersion2;
 import org.gradle.tooling.internal.protocol.problem.InternalSeverity;
@@ -1120,20 +1118,12 @@ public class BuildProgressListenerAdapter implements InternalBuildProgressListen
     }
 
     private static Failure toFailure(InternalFailure origFailure) {
-        if (origFailure instanceof InternalProblemAwareFailure) {
-            InternalProblemAwareFailure problemAwareFailure = (InternalProblemAwareFailure) origFailure;
-            List<InternalBasicProblemDetailsVersion3> problems = problemAwareFailure.getProblems();
-            List<Problem> clientProblems = new ArrayList<>(problems.size());
-            for (InternalBasicProblemDetailsVersion3 problem : problems) {
-                clientProblems.add(createProblemReport(problem));
-            }
-            return new DefaultProblemAwareFailure(
-                origFailure.getMessage(),
-                origFailure.getDescription(),
-                toFailures(origFailure.getCauses()),
-                clientProblems
-            );
-        } else if (origFailure instanceof InternalTestAssertionFailure) {
+        List<InternalBasicProblemDetailsVersion3> problems = origFailure.getProblems();
+        List<Problem> clientProblems = new ArrayList<>(problems.size());
+        for (InternalBasicProblemDetailsVersion3 problem : problems) {
+            clientProblems.add(createProblemReport(problem));
+        }
+        if (origFailure instanceof InternalTestAssertionFailure) {
             if (origFailure instanceof InternalFileComparisonTestAssertionFailure) {
                 InternalTestAssertionFailure assertionFailure = (InternalTestAssertionFailure) origFailure;
                 return new DefaultFileComparisonTestAssertionFailure(assertionFailure.getMessage(),
@@ -1170,7 +1160,8 @@ public class BuildProgressListenerAdapter implements InternalBuildProgressListen
         return origFailure == null ? null : new DefaultFailure(
             origFailure.getMessage(),
             origFailure.getDescription(),
-            toFailures(origFailure.getCauses()));
+            toFailures(origFailure.getCauses()),
+            clientProblems);
     }
 
     private static Problem createProblemReport(InternalBasicProblemDetailsVersion3 basicProblemDetails) {

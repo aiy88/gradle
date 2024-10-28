@@ -15,27 +15,39 @@
  */
 package org.gradle.internal.build.event.types;
 
+import org.gradle.api.problems.internal.Problem;
+import org.gradle.api.problems.internal.ProblemAwareFailure;
 import org.gradle.internal.exceptions.MultiCauseException;
+import org.gradle.tooling.internal.protocol.InternalBasicProblemDetailsVersion3;
 import org.gradle.tooling.internal.protocol.InternalFailure;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DefaultFailure implements Serializable, InternalFailure {
 
     private final String message;
     private final String description;
-    private final List<InternalFailure> causes;
+    private final List<? extends InternalFailure> causes;
+    private final List<InternalBasicProblemDetailsVersion3> problems;
 
-    DefaultFailure(String message, String description, List<InternalFailure> causes) {
+    DefaultFailure(String message, String description, List<? extends InternalFailure> causes) {
+        this(message, description, causes, Collections.emptyList());
+    }
+
+    DefaultFailure(String message, String description, List<? extends InternalFailure> causes, List<InternalBasicProblemDetailsVersion3> problems) {
         this.message = message;
         this.description = description;
         this.causes = causes;
+        this.problems = problems;
     }
 
     @Override
@@ -53,25 +65,41 @@ public class DefaultFailure implements Serializable, InternalFailure {
         return causes;
     }
 
-    public static InternalFailure fromThrowable(Throwable t) {
-        return fromThrowable(t, (throwable, failure) -> {});
+    @Override
+    public List<InternalBasicProblemDetailsVersion3> getProblems() {
+        return problems;
     }
 
-    public static InternalFailure fromThrowable(Throwable t, BiConsumer<Throwable, InternalFailure> consumer) {
+    public static InternalFailure fromThrowable(Throwable t) {
+        return fromThrowable(t, Collections.emptyMap(), p -> null);
+    }
+
+    public static InternalFailure fromThrowable(Throwable t, Map<Throwable, Collection<Problem>> problemsMapping, Function<Problem, InternalBasicProblemDetailsVersion3> mapper) {
         StringWriter out = new StringWriter();
         PrintWriter wrt = new PrintWriter(out);
         t.printStackTrace(wrt);
         Throwable cause = t.getCause();
-        List<InternalFailure> causeFailure;
+        List<InternalFailure> causeFailures;
         if (cause == null) {
-            causeFailure = Collections.emptyList();
+            causeFailures = Collections.emptyList();
         } else if (cause instanceof MultiCauseException) {
-            causeFailure = ((MultiCauseException) cause).getCauses().stream().map(c -> fromThrowable(c, consumer)).collect(Collectors.toList());
+            MultiCauseException multiCause = (MultiCauseException) cause;
+            causeFailures = multiCause.getCauses().stream().map(f -> fromThrowable(f, problemsMapping, mapper)).collect(Collectors.toList());
         } else {
-            causeFailure = Collections.singletonList(fromThrowable(cause, consumer));
+            causeFailures = Collections.singletonList(fromThrowable(cause, problemsMapping, mapper));
         }
-        DefaultFailure result = new DefaultFailure(t.getMessage(), out.toString(), causeFailure);
-        consumer.accept(t, result);
-        return result;
+        Collection<Problem> problemMapping = problemsMapping.get(t);
+        List<Problem> problems = new ArrayList<>();
+        if (problemMapping != null) {
+            problems.addAll(problemMapping);
+        }
+        if (t instanceof ProblemAwareFailure) {
+            problems.addAll(((ProblemAwareFailure) t).getProblems());
+        }
+        if (problems.isEmpty()) {
+            return new DefaultFailure(t.getMessage(), out.toString(), causeFailures);
+        } else {
+            return new DefaultFailure(t.getMessage(), out.toString(), causeFailures, problems.stream().map(mapper).collect(Collectors.toList()));
+        }
     }
 }

@@ -69,11 +69,10 @@ class BuildFailureProblemsCrossVersionSpec extends ToolingApiSpecification {
         GradleConnectionException e = thrown(GradleConnectionException)
         e.failures.size() == 1
         e.failures[0] instanceof Failure
-        (e.failures[0].causes[0] as ProblemAwareFailure).problems[0].contextualLabel.contextualLabel == "Task 'doesNotExist' not found in root project 'root'."
-        (e.failures[0].causes[0] as ProblemAwareFailure).problems[0].definition.id.displayName == 'Selection failed'
+        (e.failures[0].causes[0]).problems[0].contextualLabel.contextualLabel == "Task 'doesNotExist' not found in root project 'root'."
+        (e.failures[0].causes[0]).problems[0].definition.id.displayName == 'Selection failed'
     }
 
-    @spock.lang.IgnoreRest
     def "failure does not contains report from the previous build"() {
         when:
         Exception firstBuildFailure = null

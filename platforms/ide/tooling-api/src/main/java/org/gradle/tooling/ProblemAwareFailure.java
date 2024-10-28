@@ -16,9 +16,6 @@
 package org.gradle.tooling;
 
 import org.gradle.api.Incubating;
-import org.gradle.tooling.events.problems.Problem;
-
-import java.util.List;
 
 /**
  * Represents a build failure that has associated problems.
@@ -28,11 +25,4 @@ import java.util.List;
 @Incubating
 public interface ProblemAwareFailure extends Failure {
 
-    /**
-     * Returns the problems associated with this failure.
-     * @return The problems, or an empty list if there are no problems.
-     *
-     * @since 8.12
-     */
-    List<Problem> getProblems(); // TODO (donat) move method up to Failure
 }

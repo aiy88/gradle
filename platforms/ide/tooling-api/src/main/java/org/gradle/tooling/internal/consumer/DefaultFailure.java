@@ -17,6 +17,7 @@
 package org.gradle.tooling.internal.consumer;
 
 import org.gradle.tooling.Failure;
+import org.gradle.tooling.events.problems.Problem;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -28,11 +29,17 @@ public class DefaultFailure implements Failure {
     private final String message;
     private final String description;
     private final List<? extends Failure> causes;
+    private final List<Problem> problems;
 
     public DefaultFailure(String message, String description, List<? extends Failure> causes) {
+        this(message, description, causes, Collections.<Problem>emptyList());
+    }
+
+    public DefaultFailure(String message, String description, List<? extends Failure> causes, List<Problem> problems) {
         this.message = message;
         this.description = description;
         this.causes = causes;
+        this.problems = problems;
     }
 
     @Override
@@ -48,6 +55,11 @@ public class DefaultFailure implements Failure {
     @Override
     public List<? extends Failure> getCauses() {
         return causes;
+    }
+
+    @Override
+    public List<Problem> getProblems() {
+        return problems;
     }
 
     public static DefaultFailure fromThrowable(Throwable t) {
