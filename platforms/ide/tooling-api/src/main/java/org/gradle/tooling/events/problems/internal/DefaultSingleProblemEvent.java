@@ -16,6 +16,7 @@
 
 package org.gradle.tooling.events.problems.internal;
 
+import com.google.common.collect.ImmutableList;
 import org.gradle.api.NonNullApi;
 import org.gradle.tooling.Failure;
 import org.gradle.tooling.events.OperationDescriptor;
@@ -36,7 +37,8 @@ public class DefaultSingleProblemEvent extends BaseProgressEvent implements Sing
     private final ProblemDefinition problemDefinition;
     private final ContextualLabel contextualLabel;
     private final Details details;
-    private final List<Location> locations;
+    private final List<Location> originLocation;
+    private final List<Location> attributedLocations;
     private final List<Solution> solutions;
     private final AdditionalData additionalData;
     private final Failure failure;
@@ -47,7 +49,8 @@ public class DefaultSingleProblemEvent extends BaseProgressEvent implements Sing
         ProblemDefinition problemDefinition,
         @Nullable ContextualLabel contextualLabel,
         @Nullable Details details,
-        List<Location> locations,
+        List<Location> originLocations,
+        List<Location> attributedLocations,
         List<Solution> solutions,
         @Nullable AdditionalData additionalData,
         @Nullable Failure failure) {
@@ -55,7 +58,8 @@ public class DefaultSingleProblemEvent extends BaseProgressEvent implements Sing
         this.problemDefinition = problemDefinition;
         this.contextualLabel = contextualLabel;
         this.details = details;
-        this.locations = locations;
+        this.originLocation = originLocations;
+        this.attributedLocations = attributedLocations;
         this.solutions = solutions;
         this.additionalData = additionalData;
         this.failure = failure;
@@ -78,7 +82,19 @@ public class DefaultSingleProblemEvent extends BaseProgressEvent implements Sing
 
     @Override
     public List<Location> getLocations() {
-        return locations;
+        return ImmutableList
+            .<Location>builder()
+            .addAll(originLocation)
+            .addAll(attributedLocations)
+            .build();
+    }
+
+    public List<Location> getOriginLocation() {
+        return originLocation;
+    }
+
+    public List<Location> getAttributedLocations() {
+        return attributedLocations;
     }
 
     @Override

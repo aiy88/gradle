@@ -54,7 +54,9 @@ public interface Problem {
     /**
      * Return the location data associated available for this problem.
      */
-    List<ProblemLocation> getLocations();
+    List<ProblemLocation> getOriginLocations();
+
+    List<ProblemLocation> getAttributedLocations();
 
     /**
      * The exception that caused the problem.

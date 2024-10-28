@@ -48,7 +48,7 @@ public interface ProblemContext {
      * @return the locations
      * @since 8.8
      */
-    List<Location> getLocations();
+    List<Location> getOriginLocations();
 
     /**
      * Returns the list of solutions.
