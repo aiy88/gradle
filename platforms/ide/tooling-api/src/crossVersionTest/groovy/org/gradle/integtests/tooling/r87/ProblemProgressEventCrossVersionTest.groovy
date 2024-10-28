@@ -198,7 +198,7 @@ class ProblemProgressEventCrossVersionTest extends ToolingApiSpecification {
         @Override
         void statusChanged(ProgressEvent event) {
             if (event instanceof ProblemEvent) {
-                if (!(event instanceof SingleProblemEvent) || event.definition.id.name != "executing-gradle-on-jvm-versions-and-lower") {
+                if (!(event instanceof SingleProblemEvent) || event.problem.definition.id.name != "executing-gradle-on-jvm-versions-and-lower") {
                     this.problems.add(event)
                 }
             }

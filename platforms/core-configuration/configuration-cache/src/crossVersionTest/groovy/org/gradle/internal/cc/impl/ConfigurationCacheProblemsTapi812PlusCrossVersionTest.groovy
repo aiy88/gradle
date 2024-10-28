@@ -24,17 +24,18 @@ import org.gradle.tooling.BuildException
 import org.gradle.tooling.events.ProgressEvent
 import org.gradle.tooling.events.ProgressListener
 import org.gradle.tooling.events.problems.LineInFileLocation
+import org.gradle.tooling.events.problems.Problem
 import org.gradle.tooling.events.problems.Severity
 import org.gradle.tooling.events.problems.SingleProblemEvent
 import org.gradle.tooling.events.problems.internal.GeneralData
 
-@ToolingApiVersion(">=8.10 <8.12")
+@ToolingApiVersion(">=8.12")
 @TargetGradleVersion(">=8.10")
-class ConfigurationCacheProblemsCrossVersionTest extends ToolingApiSpecification {
+class ConfigurationCacheProblemsTapi812PlusCrossVersionTest extends ToolingApiSpecification {
 
     class ProblemProgressListener implements ProgressListener {
 
-        List<SingleProblemEvent> problems = []
+        List<Problem> problems = []
 
         @Override
         void statusChanged(ProgressEvent event) {
@@ -43,11 +44,11 @@ class ConfigurationCacheProblemsCrossVersionTest extends ToolingApiSpecification
 
                 // Ignore problems caused by the minimum JVM version deprecation.
                 // These are emitted intermittently depending on the version of Java used to run the test.
-                if (singleProblem.definition.id.name == "executing-gradle-on-jvm-versions-and-lower") {
+                if (singleProblem.problem.definition.id.name == "executing-gradle-on-jvm-versions-and-lower") {
                     return
                 }
 
-                this.problems.add(event)
+                this.problems.add(event.problem)
             }
         }
     }

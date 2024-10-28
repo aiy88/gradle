@@ -22,15 +22,15 @@ import org.gradle.tooling.events.problems.AdditionalData;
 import org.gradle.tooling.events.problems.ContextualLabel;
 import org.gradle.tooling.events.problems.Details;
 import org.gradle.tooling.events.problems.Location;
+import org.gradle.tooling.events.problems.Problem;
 import org.gradle.tooling.events.problems.ProblemDefinition;
-import org.gradle.tooling.events.problems.ProblemReport;
 import org.gradle.tooling.events.problems.Solution;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 @NonNullApi
-public class DefaultProblemReport implements ProblemReport {
+public class DefaultProblem implements Problem {
     private final ProblemDefinition problemDefinition;
     private final ContextualLabel contextualLabel;
     private final Details details;
@@ -39,7 +39,7 @@ public class DefaultProblemReport implements ProblemReport {
     private final AdditionalData additionalData;
     private final Failure failure;
 
-    public DefaultProblemReport(
+    public DefaultProblem(
         ProblemDefinition problemDefinition,
         ContextualLabel contextualLabel,
         Details details,

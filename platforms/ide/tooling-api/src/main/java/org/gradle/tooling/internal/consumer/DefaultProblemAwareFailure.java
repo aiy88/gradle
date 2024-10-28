@@ -19,22 +19,22 @@ package org.gradle.tooling.internal.consumer;
 import org.gradle.api.NonNullApi;
 import org.gradle.tooling.Failure;
 import org.gradle.tooling.ProblemAwareFailure;
-import org.gradle.tooling.events.problems.ProblemReport;
+import org.gradle.tooling.events.problems.Problem;
 
 import java.util.List;
 
 @NonNullApi
 public final class DefaultProblemAwareFailure extends DefaultFailure implements ProblemAwareFailure {
 
-    private final List<ProblemReport> problems;
+    private final List<Problem> problems;
 
-    public DefaultProblemAwareFailure(String message, String description, List<? extends Failure> causes, List<ProblemReport> problems) {
+    public DefaultProblemAwareFailure(String message, String description, List<? extends Failure> causes, List<Problem> problems) {
         super(message, description, causes);
         this.problems = problems;
     }
 
     @Override
-    public List<ProblemReport> getProblems() {
+    public List<Problem> getProblems() {
         return problems;
     }
 }

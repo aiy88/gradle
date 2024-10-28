@@ -208,7 +208,7 @@ public class DefaultToolingModelBuilderRegistry implements ToolingModelBuilderRe
         }
     }
 
-    private static class LenientToolingModelBuilder implements ToolingModelBuilder {
+        private static class LenientToolingModelBuilder implements ToolingModelBuilder {
         private final ToolingModelBuilder delegate;
         private final ProjectStateRegistry projectStateRegistry;
 

@@ -16,7 +16,7 @@
 package org.gradle.tooling;
 
 import org.gradle.api.Incubating;
-import org.gradle.tooling.events.problems.ProblemReport;
+import org.gradle.tooling.events.problems.Problem;
 
 import java.util.List;
 
@@ -34,5 +34,5 @@ public interface ProblemAwareFailure extends Failure {
      *
      * @since 8.12
      */
-    List<ProblemReport> getProblems();
+    List<Problem> getProblems(); // TODO (donat) move method up to Failure
 }

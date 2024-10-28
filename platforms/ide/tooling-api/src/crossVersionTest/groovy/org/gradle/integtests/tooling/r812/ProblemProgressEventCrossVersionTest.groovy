@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gradle.integtests.tooling.r89
+package org.gradle.integtests.tooling.r812
 
 import org.gradle.integtests.fixtures.GroovyBuildScriptLanguage
 import org.gradle.integtests.tooling.fixture.TargetGradleVersion
@@ -27,6 +27,7 @@ import org.gradle.tooling.Failure
 import org.gradle.tooling.events.ProgressEvent
 import org.gradle.tooling.events.ProgressListener
 import org.gradle.tooling.events.problems.LineInFileLocation
+import org.gradle.tooling.events.problems.Problem
 import org.gradle.tooling.events.problems.Severity
 import org.gradle.tooling.events.problems.SingleProblemEvent
 import org.gradle.tooling.events.problems.internal.GeneralData
@@ -39,7 +40,7 @@ import static org.gradle.integtests.fixtures.AvailableJavaHomes.getJdk8
 import static org.gradle.integtests.tooling.r86.ProblemProgressEventCrossVersionTest.getProblemReportTaskString
 import static org.gradle.integtests.tooling.r86.ProblemsServiceModelBuilderCrossVersionTest.getBuildScriptSampleContent
 
-@ToolingApiVersion(">=8.9 <8.12")
+@ToolingApiVersion(">=8.12")
 @TargetGradleVersion(">=8.9")
 class ProblemProgressEventCrossVersionTest extends ToolingApiSpecification {
 
@@ -196,8 +197,8 @@ class ProblemProgressEventCrossVersionTest extends ToolingApiSpecification {
         given:
         Assume.assumeTrue(javaHome != null)
         buildFile getBuildScriptSampleContent(false, false, targetVersion)
-        ProblemProgressListener listener
-        listener = new ProblemProgressListener()
+        org.gradle.integtests.tooling.r87.ProblemProgressEventCrossVersionTest.ProblemProgressListener listener
+        listener = new org.gradle.integtests.tooling.r87.ProblemProgressEventCrossVersionTest.ProblemProgressListener()
 
 
         when:
@@ -213,9 +214,9 @@ class ProblemProgressEventCrossVersionTest extends ToolingApiSpecification {
 
         then:
         problems.size() == 1
-        problems[0].definition.id.displayName == 'label'
-        problems[0].definition.id.group.displayName == 'Generic'
-        failureMessage(problems[0].failure) == 'test'
+        problems[0].problem.definition.id.displayName == 'label'
+        problems[0].problem.definition.id.group.displayName == 'Generic'
+        failureMessage(problems[0].problem.failure) == 'test'
 
         where:
         javaHome << [
@@ -289,12 +290,12 @@ class ProblemProgressEventCrossVersionTest extends ToolingApiSpecification {
         thrown(BuildException)
         def problems = listener.problems
         validateCompilationProblem(problems, buildFile)
-        failureMessage(problems[0].failure) == null
+        problems[0].failure.failure == null
     }
 
     class ProblemProgressListener implements ProgressListener {
 
-        List<SingleProblemEvent> problems = []
+        List<Problem> problems = []
 
         @Override
         void statusChanged(ProgressEvent event) {
@@ -303,16 +304,16 @@ class ProblemProgressEventCrossVersionTest extends ToolingApiSpecification {
 
                 // Ignore problems caused by the minimum JVM version deprecation.
                 // These are emitted intermittently depending on the version of Java used to run the test.
-                if (singleProblem.definition.id.name == "executing-gradle-on-jvm-versions-and-lower") {
+                if (singleProblem.problem.definition.id.name == "executing-gradle-on-jvm-versions-and-lower") {
                     return
                 }
 
-                this.problems.add(event)
+                this.problems.add(event.problem)
             }
         }
     }
 
     def failureMessage(failure) {
-        failure instanceof Failure ? failure?.message : failure?.failure?.message
+        failure instanceof Failure ? failure.message : failure.failure.message
     }
 }

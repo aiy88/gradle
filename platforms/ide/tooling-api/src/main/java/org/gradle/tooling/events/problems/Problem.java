@@ -29,7 +29,7 @@ import java.util.List;
  * @since 8.12
  */
 @Incubating
-public interface ProblemReport {
+public interface Problem {
 
     /**
      * Returns the problem definition.
