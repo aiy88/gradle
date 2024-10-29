@@ -30,6 +30,7 @@ dependencies {
     api(projects.messaging)
     api(projects.modelCore)
     api(projects.native)
+    api(projects.problemsApi)
     api(projects.processMemoryServices)
     api(projects.serialization)
     api(projects.serviceLookup)
@@ -49,7 +50,6 @@ dependencies {
     implementation(projects.enterpriseOperations)
     implementation(projects.functional)
     implementation(projects.io)
-    api(projects.problemsApi) // TODO (donat) investigate why api dependency is needed
     implementation(projects.serviceRegistryBuilder)
     implementation(projects.fileTemp)
     implementation(projects.processServices)
