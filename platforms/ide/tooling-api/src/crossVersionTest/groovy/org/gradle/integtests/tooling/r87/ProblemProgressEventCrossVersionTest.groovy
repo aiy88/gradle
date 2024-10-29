@@ -32,7 +32,7 @@ import org.gradle.util.GradleVersion
 import static org.gradle.integtests.fixtures.AvailableJavaHomes.getJdk17
 import static org.gradle.integtests.tooling.r86.ProblemProgressEventCrossVersionTest.getProblemReportTaskString
 
-@ToolingApiVersion(">=8.7")
+@ToolingApiVersion(">=8.7 <8.12")
 class ProblemProgressEventCrossVersionTest extends ToolingApiSpecification {
 
     def withReportProblemTask(@GroovyBuildScriptLanguage String taskActionMethodBody) {

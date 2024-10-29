@@ -22,6 +22,9 @@ import com.google.common.collect.Multimaps;
 import org.gradle.internal.service.scopes.Scope;
 import org.gradle.internal.service.scopes.ServiceScope;
 
+import java.util.Collection;
+import java.util.Map;
+
 @ServiceScope(Scope.BuildTree.class)
 public class DefaultBuildSessionProblemContainer implements BuildSessionProblemContainer {
 
@@ -33,7 +36,7 @@ public class DefaultBuildSessionProblemContainer implements BuildSessionProblemC
     }
 
     @Override
-    public Multimap<Throwable, Problem> getProblemsForThrowables() {
-        return problemsForThrowables;
+    public Map<Throwable, Collection<Problem>> getProblemsForThrowables() {
+        return problemsForThrowables.asMap();
     }
 }

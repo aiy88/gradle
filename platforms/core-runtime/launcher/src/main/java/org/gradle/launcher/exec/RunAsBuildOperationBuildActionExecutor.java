@@ -16,7 +16,6 @@
 
 package org.gradle.launcher.exec;
 
-import com.google.common.collect.Multimap;
 import org.gradle.api.NonNullApi;
 import org.gradle.api.problems.internal.BuildSessionProblemContainer;
 import org.gradle.api.problems.internal.Problem;
@@ -30,6 +29,9 @@ import org.gradle.internal.operations.logging.LoggingBuildOperationProgressBroad
 import org.gradle.internal.operations.notify.BuildOperationNotificationValve;
 import org.gradle.internal.session.BuildSessionActionExecutor;
 import org.gradle.internal.session.BuildSessionContext;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * An {@link BuildActionRunner} that wraps all work in a build operation.
@@ -76,7 +78,7 @@ public class RunAsBuildOperationBuildActionExecutor implements BuildSessionActio
                 public BuildOperationDescriptor.Builder description() {
                     return BuildOperationDescriptor.displayName("Run build").details(new RunBuildBuildOperationType.Details() {
                         @Override
-                        public Multimap<Throwable, Problem> getProblemsForThrowables() { // TODO (donat) we probably should not use guava in build operation descriptors
+                        public Map<Throwable, Collection<Problem>> getProblemsForThrowables() {
                             return problemContainer.getProblemsForThrowables();
                         }
                     });

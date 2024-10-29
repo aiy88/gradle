@@ -16,7 +16,6 @@
 
 package org.gradle.tooling.internal.provider.runner;
 
-import com.google.common.collect.Multimap;
 import org.gradle.api.NonNullApi;
 import org.gradle.api.problems.internal.Problem;
 import org.gradle.internal.build.event.BuildEventSubscriptions;
@@ -33,6 +32,8 @@ import org.gradle.tooling.internal.protocol.events.InternalOperationFinishedProg
 import org.gradle.tooling.internal.protocol.events.InternalOperationStartedProgressEvent;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Map;
 
 @NonNullApi
 class RootBuildOperationMapper implements BuildOperationMapper<RunBuildBuildOperationType.Details, DefaultRootOperationDescriptor> {
@@ -61,7 +62,7 @@ class RootBuildOperationMapper implements BuildOperationMapper<RunBuildBuildOper
 
     @Override
     public InternalOperationFinishedProgressEvent createFinishedEvent(DefaultRootOperationDescriptor descriptor, RunBuildBuildOperationType.Details details, OperationFinishEvent finishEvent) {
-        Multimap<Throwable, Problem> problemsForThrowables = details.getProblemsForThrowables();
-        return new DefaultOperationFinishedProgressEvent(finishEvent.getEndTime(), descriptor, ClientForwardingBuildOperationListener.toOperationResult(finishEvent, problemsForThrowables.asMap()));
+        Map<Throwable, Collection<Problem>> problemsForThrowables = details.getProblemsForThrowables();
+        return new DefaultOperationFinishedProgressEvent(finishEvent.getEndTime(), descriptor, ClientForwardingBuildOperationListener.toOperationResult(finishEvent, problemsForThrowables));
     }
 }

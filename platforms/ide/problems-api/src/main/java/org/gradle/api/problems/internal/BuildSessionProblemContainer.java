@@ -16,10 +16,12 @@
 
 package org.gradle.api.problems.internal;
 
-import com.google.common.collect.Multimap;
 import org.gradle.api.Incubating;
 import org.gradle.internal.service.scopes.Scope;
 import org.gradle.internal.service.scopes.ServiceScope;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * A container for problems that are associated with a build session.
@@ -32,5 +34,5 @@ public interface BuildSessionProblemContainer {
 
     void onProblem(Throwable exception, Problem problem);
 
-    Multimap<Throwable, Problem> getProblemsForThrowables();
+    Map<Throwable, Collection<Problem>> getProblemsForThrowables();
 }

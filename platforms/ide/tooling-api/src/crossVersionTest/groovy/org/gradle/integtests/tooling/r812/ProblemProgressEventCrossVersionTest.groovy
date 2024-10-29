@@ -293,6 +293,60 @@ class ProblemProgressEventCrossVersionTest extends ToolingApiSpecification {
         problems[0].failure.failure == null
     }
 
+    @TargetGradleVersion("=8.5")
+    def "No problem for exceptions in 8.5"() {
+        // serialization of exceptions is not working in 8.5 (Gson().toJson() fails)
+        withReportProblemTask """
+            throw new RuntimeException("boom")
+        """
+
+        given:
+        def listener = new ProblemProgressListener()
+
+        when:
+        withConnection {
+            it.newBuild()
+                .forTasks(":reportProblem")
+                .setJavaHome(jdk17.javaHome)
+                .addProgressListener(listener)
+                .run()
+        }
+
+        then:
+        thrown(BuildException)
+        listener.problems.size() == 0
+    }
+
+    @TargetGradleVersion(">=8.6 <8.9") //  8.5 sends problem events via InternalProblemDetails but we ignore it in BuildProgressListenerAdapter
+    def "Failing executions produce problems"() {
+        setup:
+        buildFile """
+            plugins {
+              id 'java-library'
+            }
+            repositories.jcenter()
+            task bar {}
+            task baz {}
+        """
+
+
+        when:
+        def listener = new ProblemProgressListener()
+        withConnection { connection ->
+            connection.newBuild()
+                .forTasks(":ba")
+                .addProgressListener(listener)
+                .setStandardError(System.err)
+                .setStandardOutput(System.out)
+                .addArguments("--info")
+                .run()
+        }
+
+        then:
+        thrown(BuildException)
+        listener.problems.size() == 2
+    }
+
     class ProblemProgressListener implements ProgressListener {
 
         List<Problem> problems = []

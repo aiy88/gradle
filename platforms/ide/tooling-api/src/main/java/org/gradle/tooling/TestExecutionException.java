@@ -17,6 +17,7 @@
 package org.gradle.tooling;
 
 import com.google.common.base.Supplier;
+import org.gradle.api.Incubating;
 
 import java.util.List;
 
@@ -26,8 +27,18 @@ import java.util.List;
  * @since 2.6
  */
 public class TestExecutionException extends GradleConnectionException {
-    public TestExecutionException(String message, Throwable throwable, Supplier<List<Failure>> failures) {
+    public TestExecutionException(String message, Throwable throwable) {
         super(message, throwable);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @since 8.12
+     */
+    @Incubating
+    public TestExecutionException(String message, Throwable throwable, Supplier<List<Failure>> failures) {
+        super(message, throwable, failures);
     }
 
     public TestExecutionException(String message) {
