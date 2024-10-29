@@ -16,13 +16,17 @@
 
 package org.gradle.tooling;
 
+import com.google.common.base.Supplier;
+
+import java.util.List;
+
 /**
  * Thrown when the {@link org.gradle.tooling.TestLauncher} cannot run tests, or when one or more tests fail.
  *
  * @since 2.6
  */
 public class TestExecutionException extends GradleConnectionException {
-    public TestExecutionException(String message, Throwable throwable) {
+    public TestExecutionException(String message, Throwable throwable, Supplier<List<Failure>> failures) {
         super(message, throwable);
     }
 

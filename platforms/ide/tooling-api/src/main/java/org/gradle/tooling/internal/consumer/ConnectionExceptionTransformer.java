@@ -53,7 +53,6 @@ public class ConnectionExceptionTransformer {
     }
 
     public GradleConnectionException transform(Throwable failure) {
-        // TODO (donat) add failures to related
         if (failure instanceof InternalUnsupportedBuildArgumentException) {
             return new UnsupportedBuildArgumentException(connectionFailureMessage(failure)
                 + "\n" + failure.getMessage(), failure);
@@ -65,7 +64,7 @@ public class ConnectionExceptionTransformer {
         } else if (failure instanceof InternalBuildCancelledException) {
             return new BuildCancelledException(connectionFailureMessage(failure), failure.getCause());
         } else if (failure instanceof InternalTestExecutionException) {
-            return new TestExecutionException(connectionFailureMessage(failure), failure.getCause());
+            return new TestExecutionException(connectionFailureMessage(failure), failure.getCause(), failures);
         } else if (failure instanceof BuildExceptionVersion1) {
             return new BuildException(connectionFailureMessage(failure), failure.getCause(), failures);
         } else if (failure instanceof ListenerNotificationException) {

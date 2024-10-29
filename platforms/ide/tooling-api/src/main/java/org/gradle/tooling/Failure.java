@@ -59,5 +59,5 @@ public interface Failure {
      * @since 8.12
      */
     @Incubating
-    List<Problem> getProblems(); // TODO (donat) move method up to Failure
+    List<Problem> getProblems();
 }
