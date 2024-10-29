@@ -64,6 +64,7 @@ public class DefaultProblemsOperationContext implements ProblemContext {
         return originLocations;
     }
 
+    @Override
     public List<Location> getAttributedLocations() {
         return attributedLocations;
     }

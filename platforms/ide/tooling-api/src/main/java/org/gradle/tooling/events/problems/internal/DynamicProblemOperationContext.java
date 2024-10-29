@@ -50,6 +50,11 @@ public class DynamicProblemOperationContext extends DefaultOperationDescriptor i
     }
 
     @Override
+    public List<Location> getAttributedLocations() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<Solution> getSolutions() {
         throw new UnsupportedOperationException();
     }

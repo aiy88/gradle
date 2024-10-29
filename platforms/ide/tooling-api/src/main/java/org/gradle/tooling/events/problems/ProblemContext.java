@@ -43,12 +43,26 @@ public interface ProblemContext {
     Details getDetails();
 
     /**
-     * Returns the locations associated with this problem.
+     * Returns the locations where the problem originated.
+     * <p>
+     * E.g. in case of a failed java compilation, the line number and file name where the compilation failed.
      *
-     * @return the locations
-     * @since 8.8
+     * @return the origin locations
+     * @since 8.12
      */
     List<Location> getOriginLocations();
+
+    /**
+     * Returns additional locations where the problem could be attributed to.
+     * <p>
+     * E.g. in case of a failed java compilation,
+     * which plugin caused the compilation to fail (in this example the 'java' plugin),
+     * and where the plugin was applied.
+     *
+     * @return the attributed locations
+     * @since 8.12
+     */
+    List<Location> getAttributedLocations();
 
     /**
      * Returns the list of solutions.
