@@ -494,6 +494,7 @@ public class ProviderConnection {
                     }
                 }
                 if (consumerVersion.compareTo(GradleVersion.version("8.12")) < 0) {
+                    // The root type was split out of 'generic' type in 8.12, so include it when an older consumer requests 'generic'
                     if (operationTypes.contains(OperationType.GENERIC)) {
                         operationTypes.add(OperationType.ROOT);
                     }
