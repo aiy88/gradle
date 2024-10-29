@@ -106,6 +106,7 @@ class DefaultProblemTest extends Specification {
             null,
             [],
             [],
+            [],
             'description',
             new RuntimeException('cause'),
             additionalData
@@ -122,6 +123,7 @@ class DefaultProblemTest extends Specification {
             ),
             'contextual label',
             ['contextual solution'],
+            [],
             [],
             'description',
             new RuntimeException('cause'),
