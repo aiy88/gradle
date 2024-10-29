@@ -58,6 +58,7 @@ class ProblemProgressEventCrossVersionTest extends ToolingApiSpecification {
         return listener.problems
     }
 
+    @TargetGradleVersion(">=8.6")
     def "Failing executions produce problems"() {
         setup:
         buildFile """
@@ -315,36 +316,6 @@ class ProblemProgressEventCrossVersionTest extends ToolingApiSpecification {
         then:
         thrown(BuildException)
         listener.problems.size() == 0
-    }
-
-    @TargetGradleVersion(">=8.6 <8.9") //  8.5 sends problem events via InternalProblemDetails but we ignore it in BuildProgressListenerAdapter
-    def "Failing executions produce problems"() {
-        setup:
-        buildFile """
-            plugins {
-              id 'java-library'
-            }
-            repositories.jcenter()
-            task bar {}
-            task baz {}
-        """
-
-
-        when:
-        def listener = new ProblemProgressListener()
-        withConnection { connection ->
-            connection.newBuild()
-                .forTasks(":ba")
-                .addProgressListener(listener)
-                .setStandardError(System.err)
-                .setStandardOutput(System.out)
-                .addArguments("--info")
-                .run()
-        }
-
-        then:
-        thrown(BuildException)
-        listener.problems.size() == 2
     }
 
     class ProblemProgressListener implements ProgressListener {
