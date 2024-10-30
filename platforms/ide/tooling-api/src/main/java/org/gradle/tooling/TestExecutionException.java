@@ -16,7 +16,6 @@
 
 package org.gradle.tooling;
 
-import com.google.common.base.Supplier;
 import org.gradle.api.Incubating;
 
 import java.util.List;

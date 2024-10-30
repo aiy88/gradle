@@ -16,13 +16,13 @@
 package org.gradle.tooling.internal.consumer;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableSet;
 import org.gradle.internal.classpath.ClassPath;
 import org.gradle.tooling.CancellationToken;
 import org.gradle.tooling.Failure;
 import org.gradle.tooling.LongRunningOperation;
 import org.gradle.tooling.ProgressListener;
+import org.gradle.tooling.Supplier;
 import org.gradle.tooling.events.OperationType;
 import org.gradle.tooling.internal.consumer.parameters.ConsumerOperationParameters;
 import org.gradle.util.internal.CollectionUtils;

@@ -16,13 +16,13 @@
 
 package org.gradle.tooling.internal.consumer;
 
-import com.google.common.base.Supplier;
 import org.gradle.internal.event.ListenerNotificationException;
 import org.gradle.tooling.BuildCancelledException;
 import org.gradle.tooling.BuildException;
 import org.gradle.tooling.Failure;
 import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.ListenerFailedException;
+import org.gradle.tooling.Supplier;
 import org.gradle.tooling.TestExecutionException;
 import org.gradle.tooling.exceptions.UnsupportedBuildArgumentException;
 import org.gradle.tooling.exceptions.UnsupportedOperationConfigurationException;

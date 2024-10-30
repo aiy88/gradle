@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradle.tooling;
 
+package org.gradle.tooling;
 import org.gradle.api.Incubating;
 
-import java.util.List;
-
 /**
- * Thrown when a Gradle build fails or when a model cannot be built.
+ * A value supplier. The Tooling API needs to be comatible with Java 7, therefore we cannot use the {@link java.util.function.Supplier} interface.
  *
- * @since 1.0-milestone-3
+ * @param <T> the type of the value
+ * @since 8.12
  */
-public class BuildException extends GradleConnectionException {
-    public BuildException(String message, Throwable throwable) {
-        super(message, throwable);
-    }
+@Incubating
+public interface Supplier<T> {
 
     /**
-     * Constructor.
+     * Returns the value.
      *
+     * @return the value
      * @since 8.12
      */
-    @Incubating
-    public BuildException(String message, Throwable cause, Supplier<List<Failure>> failures) {
-        super(message, cause, failures);
-    }
+    T get();
 }
