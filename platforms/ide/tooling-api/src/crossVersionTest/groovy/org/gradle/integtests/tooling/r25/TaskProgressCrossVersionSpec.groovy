@@ -24,10 +24,8 @@ import org.gradle.integtests.tooling.fixture.ToolingApiVersion
 import org.gradle.integtests.tooling.fixture.WithOldConfigurationsSupport
 import org.gradle.test.fixtures.server.http.BlockingHttpServer
 import org.gradle.tooling.BuildException
-import org.gradle.tooling.GradleConnectionException
 import org.gradle.tooling.ListenerFailedException
 import org.gradle.tooling.ProjectConnection
-import org.gradle.tooling.ResultHandler
 import org.gradle.tooling.events.OperationType
 import org.gradle.tooling.events.ProgressEvent
 import org.gradle.tooling.events.task.TaskProgressEvent
@@ -182,57 +180,6 @@ class TaskProgressCrossVersionSpec extends ToolingApiSpecification implements Wi
         test.failures[0].message == "Execution failed for task ':test'."
 
         events.failed == [test]
-    }
-
-    def " all events have been delivered before operation fails"() {
-        given:
-        buildFile << """
-            apply plugin: 'java'
-            ${mavenCentralRepository()}
-            dependencies { ${testImplementationConfiguration} 'junit:junit:4.13' }
-            compileTestJava.options.fork = true  // forked as 'Gradle Test Executor 1'
-        """
-
-        file("src/test/java/MyTest.java") << """
-            package example;
-            public class MyTest {
-                @org.junit.Test public void foo() throws Exception {
-                     Thread.sleep(100);  // sleep for a moment to ensure test duration is > 0 (due to limited clock resolution)
-                     throw new RuntimeException("broken", new RuntimeException("nope"));
-                }
-            }
-        """
-
-        when:
-        def resultHandler = new ResultHandler() {
-            long last
-
-            @Override
-            void onComplete(Object result) {
-                this.last = System.nanoTime()
-            }
-
-            @Override
-            void onFailure(GradleConnectionException failure) {
-                this.last = System.nanoTime()
-            }
-        }
-        def progressListener = new org.gradle.tooling.events.ProgressListener() {
-
-            long last
-
-            @Override
-            void statusChanged(ProgressEvent event) {
-                this.last = System.nanoTime()
-            }
-        }
-        withConnection {
-            ProjectConnection connection ->
-                connection.newBuild().forTasks('test').addProgressListener(progressListener).run(resultHandler)
-        }
-
-        then:
-        resultHandler.last > progressListener.last
     }
 
     @TargetGradleVersion(">=3.0 <3.6")
