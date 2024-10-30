@@ -1105,7 +1105,10 @@ public class BuildProgressListenerAdapter implements InternalBuildProgressListen
         }
         List<Failure> failures = new ArrayList<>();
         for (InternalFailure cause : causes) {
-            failures.add(toFailure(cause));
+            Failure f = toFailure(cause);
+            if (f != null) {
+                failures.add(f);
+            }
         }
         return failures;
     }
@@ -1118,6 +1121,9 @@ public class BuildProgressListenerAdapter implements InternalBuildProgressListen
     }
 
     private static Failure toFailure(InternalFailure origFailure) {
+        if (origFailure == null) {
+            return null;
+        }
         List<InternalBasicProblemDetailsVersion3> problems = origFailure.getProblems();
         List<Problem> clientProblems = new ArrayList<>(problems.size());
         for (InternalBasicProblemDetailsVersion3 problem : problems) {
@@ -1157,7 +1163,7 @@ public class BuildProgressListenerAdapter implements InternalBuildProgressListen
                 ((InternalTestFrameworkFailure) origFailure).getStacktrace()
             );
         }
-        return origFailure == null ? null : new DefaultFailure(
+        return new DefaultFailure(
             origFailure.getMessage(),
             origFailure.getDescription(),
             toFailures(origFailure.getCauses()),
