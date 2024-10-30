@@ -34,7 +34,8 @@ import org.gradle.api.internal.properties.GradleProperties
 import org.gradle.api.internal.provider.DefaultProviderFactory
 import org.gradle.api.internal.provider.DefaultValueSourceProviderFactory
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildSessionExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildTreeExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.InternalProblems
 import org.gradle.api.problems.internal.ProblemEmitter
@@ -394,7 +395,7 @@ ${nameClash { noIntro().kind('dependency bundles').inConflict('one.cool', 'oneCo
         def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
             getId() >> new OperationIdentifier(42)
         }
-        def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
+        def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultBuildTreeExceptionProblemContainer(new DefaultBuildSessionExceptionProblemContainer()))
         DefaultVersionCatalogBuilder builder = new DefaultVersionCatalogBuilder(
             "lib",
             Interners.newStrongInterner(),

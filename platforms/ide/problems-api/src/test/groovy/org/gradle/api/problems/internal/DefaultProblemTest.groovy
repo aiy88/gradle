@@ -70,7 +70,7 @@ class DefaultProblemTest extends Specification {
     def "unbound builder result with a change and check report"() {
         given:
         def emitter = Mock(ProblemEmitter)
-        def problemReporter = new DefaultProblemReporter([emitter], null, CurrentBuildOperationRef.instance(), new DefaultExceptionProblemContainer(), new AdditionalDataBuilderFactory())
+        def problemReporter = new DefaultProblemReporter([emitter], null, CurrentBuildOperationRef.instance(), new DefaultBuildSessionExceptionProblemContainer(), new AdditionalDataBuilderFactory())
         def problem = createTestProblem(Severity.WARNING)
         def builder = problem.toBuilder()
         def newProblem = builder

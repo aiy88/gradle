@@ -29,10 +29,12 @@ import java.util.Map;
  * @since 8.12
  */
 @Incubating
-@ServiceScope(Scope.BuildTree.class)
-public interface ExceptionProblemContainer {
+@ServiceScope(Scope.BuildSession.class)
+public interface BuildSessionExceptionProblemContainer {
 
     void onProblem(Throwable exception, Problem problem);
 
     Map<Throwable, Collection<Problem>> getProblemsForThrowables();
+
+    void clear();
 }

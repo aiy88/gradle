@@ -19,7 +19,8 @@ package org.gradle.internal.deprecation
 
 import org.gradle.api.internal.DocumentationRegistry
 import org.gradle.api.logging.configuration.WarningMode
-import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildSessionExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildTreeExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.ProblemEmitter
 import org.gradle.internal.Factory
@@ -45,7 +46,7 @@ class DeprecationLoggerTest extends ConcurrentSpec {
     def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
         getId() >> new OperationIdentifier(42)
     }
-    def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
+    def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultBuildTreeExceptionProblemContainer(new DefaultBuildSessionExceptionProblemContainer()))
 
     def setup() {
         DeprecationLogger.init(WarningMode.All, buildOperationProgressEventEmitter, problems, diagnosticsFactory.newUnlimitedStream())

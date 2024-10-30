@@ -31,7 +31,8 @@ import org.gradle.api.internal.catalog.PluginModel
 import org.gradle.api.internal.catalog.problems.VersionCatalogErrorMessages
 import org.gradle.api.internal.catalog.problems.VersionCatalogProblemId
 import org.gradle.api.internal.catalog.problems.VersionCatalogProblemTestFor
-import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildSessionExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildTreeExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.InternalProblems
 import org.gradle.api.problems.internal.ProblemEmitter
@@ -50,7 +51,7 @@ class TomlCatalogFileParserTest extends Specification implements VersionCatalogE
     def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
         getId() >> new OperationIdentifier(42)
     }
-    def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
+    def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultBuildTreeExceptionProblemContainer(new DefaultBuildSessionExceptionProblemContainer()))
 
     def createVersionCatalogBuilder() {
         new DefaultVersionCatalogBuilder(

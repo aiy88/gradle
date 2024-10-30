@@ -22,7 +22,8 @@ import org.gradle.api.InvalidUserDataException
 import org.gradle.api.internal.catalog.DefaultVersionCatalog
 import org.gradle.api.internal.catalog.DefaultVersionCatalogBuilder
 import org.gradle.api.internal.catalog.parser.TomlCatalogFileParser
-import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildSessionExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildTreeExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.InternalProblems
 import org.gradle.api.problems.internal.ProblemEmitter
@@ -112,7 +113,7 @@ format.version = "1.1"
         def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
             getId() >> new OperationIdentifier(42)
         }
-        def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
+        def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultBuildTreeExceptionProblemContainer(new DefaultBuildSessionExceptionProblemContainer()))
         def builder = new DefaultVersionCatalogBuilder(
             "libs",
             Interners.newStrongInterner(),

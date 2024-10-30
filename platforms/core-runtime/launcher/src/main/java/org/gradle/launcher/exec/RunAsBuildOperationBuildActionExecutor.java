@@ -17,7 +17,7 @@
 package org.gradle.launcher.exec;
 
 import org.gradle.api.NonNullApi;
-import org.gradle.api.problems.internal.ExceptionProblemContainer;
+import org.gradle.api.problems.internal.BuildSessionExceptionProblemContainer;
 import org.gradle.api.problems.internal.Problem;
 import org.gradle.internal.buildtree.BuildActionRunner;
 import org.gradle.internal.invocation.BuildAction;
@@ -44,12 +44,12 @@ public class RunAsBuildOperationBuildActionExecutor implements BuildSessionActio
     private final BuildOperationRunner buildOperationRunner;
     private final LoggingBuildOperationProgressBroadcaster loggingBuildOperationProgressBroadcaster;
     private final BuildOperationNotificationValve buildOperationNotificationValve;
-    private final ExceptionProblemContainer problemContainer;
+    private final BuildSessionExceptionProblemContainer problemContainer;
 
     public RunAsBuildOperationBuildActionExecutor(BuildSessionActionExecutor delegate,
                                                   BuildOperationRunner buildOperationRunner,
                                                   LoggingBuildOperationProgressBroadcaster loggingBuildOperationProgressBroadcaster,
-                                                  BuildOperationNotificationValve buildOperationNotificationValve, ExceptionProblemContainer problemContainer
+                                                  BuildOperationNotificationValve buildOperationNotificationValve, BuildSessionExceptionProblemContainer problemContainer
     ) {
         this.delegate = delegate;
         this.buildOperationRunner = buildOperationRunner;

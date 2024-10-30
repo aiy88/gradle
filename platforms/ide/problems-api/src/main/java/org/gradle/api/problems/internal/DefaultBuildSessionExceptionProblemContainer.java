@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @ServiceScope(Scope.BuildTree.class)
-public class DefaultExceptionProblemContainer implements ExceptionProblemContainer {
+public class DefaultBuildSessionExceptionProblemContainer implements BuildSessionExceptionProblemContainer {
 
     private final Multimap<Throwable, Problem> problemsForThrowables = Multimaps.synchronizedMultimap(HashMultimap.<Throwable, Problem>create());
 
@@ -38,5 +38,10 @@ public class DefaultExceptionProblemContainer implements ExceptionProblemContain
     @Override
     public Map<Throwable, Collection<Problem>> getProblemsForThrowables() {
         return problemsForThrowables.asMap();
+    }
+
+    @Override
+    public void clear() {
+        problemsForThrowables.clear();
     }
 }

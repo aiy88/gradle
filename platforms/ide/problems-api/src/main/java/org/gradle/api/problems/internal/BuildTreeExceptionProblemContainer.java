@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package org.gradle.problems.internal.services;
+package org.gradle.api.problems.internal;
 
-import org.gradle.api.problems.internal.BuildSessionExceptionProblemContainer;
-import org.gradle.api.problems.internal.DefaultBuildSessionExceptionProblemContainer;
-import org.gradle.internal.service.Provides;
-import org.gradle.internal.service.ServiceRegistrationProvider;
+import org.gradle.api.Incubating;
 import org.gradle.internal.service.scopes.Scope;
 import org.gradle.internal.service.scopes.ServiceScope;
 
-@ServiceScope(Scope.BuildSession.class)
-public class ProblemsBuildSessionServices implements ServiceRegistrationProvider {
+import java.util.Collection;
+import java.util.Map;
 
-    @Provides
-    BuildSessionExceptionProblemContainer createBuildSessionProblemContainer() {
-        return new DefaultBuildSessionExceptionProblemContainer();
-    }
+/**
+ * Holds references to exceptions reported via {@link org.gradle.problems.buildtree.ProblemReporter} and their associated problem reports.
+ *
+ * @since 8.12
+ */
+@Incubating
+@ServiceScope(Scope.BuildTree.class)
+public interface BuildTreeExceptionProblemContainer {
+
+    void onProblem(Throwable exception, Problem problem);
+
+    Map<Throwable, Collection<Problem>> getProblemsForThrowables();
 }

@@ -20,7 +20,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.initialization.Settings
 import org.gradle.api.internal.project.ProjectInternal
-import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildSessionExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildTreeExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.ProblemEmitter
 import org.gradle.internal.operations.CurrentBuildOperationRef
@@ -33,7 +34,7 @@ class ImperativeOnlyPluginTargetTest extends Specification {
     def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
         getId() >> new OperationIdentifier(42)
     }
-    def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
+    def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultBuildTreeExceptionProblemContainer(new DefaultBuildSessionExceptionProblemContainer()))
 
 
     def "mismatched plugin application target is detected"() {
