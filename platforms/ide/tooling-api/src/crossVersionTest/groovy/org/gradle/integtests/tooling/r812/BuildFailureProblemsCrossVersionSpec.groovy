@@ -21,7 +21,6 @@ import org.gradle.integtests.tooling.fixture.ToolingApiSpecification
 import org.gradle.integtests.tooling.fixture.ToolingApiVersion
 import org.gradle.tooling.Failure
 import org.gradle.tooling.GradleConnectionException
-import org.gradle.tooling.ProblemAwareFailure
 import spock.lang.Ignore
 
 @ToolingApiVersion('>=8.12')
@@ -97,8 +96,8 @@ class BuildFailureProblemsCrossVersionSpec extends ToolingApiSpecification {
         GradleConnectionException e = thrown(GradleConnectionException)
         e.failures.size() == 1
         e.failures[0] instanceof Failure
-        (e.failures[0].causes[0] as ProblemAwareFailure).problems[0].contextualLabel.contextualLabel == "Task 'doesNotExist2' not found in root project 'root'."
-        (e.failures[0].causes[0] as ProblemAwareFailure).problems[0].definition.id.displayName == 'Selection failed'
+        e.failures[0].causes[0].problems[0].contextualLabel.contextualLabel == "Task 'doesNotExist2' not found in root project 'root'."
+        e.failures[0].causes[0].problems[0].definition.id.displayName == 'Selection failed'
     }
 
 
