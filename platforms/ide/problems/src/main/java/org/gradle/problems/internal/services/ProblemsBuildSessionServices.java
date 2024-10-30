@@ -16,8 +16,8 @@
 
 package org.gradle.problems.internal.services;
 
-import org.gradle.api.problems.internal.BuildSessionProblemContainer;
-import org.gradle.api.problems.internal.DefaultBuildSessionProblemContainer;
+import org.gradle.api.problems.internal.DefaultExceptionProblemContainer;
+import org.gradle.api.problems.internal.ExceptionProblemContainer;
 import org.gradle.internal.service.Provides;
 import org.gradle.internal.service.ServiceRegistrationProvider;
 import org.gradle.internal.service.scopes.Scope;
@@ -27,8 +27,8 @@ import org.gradle.internal.service.scopes.ServiceScope;
 public class ProblemsBuildSessionServices implements ServiceRegistrationProvider {
 
     @Provides
-    BuildSessionProblemContainer createBuildSessionProblemContainer(
+    ExceptionProblemContainer createBuildSessionProblemContainer(
     ) {
-        return new DefaultBuildSessionProblemContainer();
+        return new DefaultExceptionProblemContainer();
     }
 }

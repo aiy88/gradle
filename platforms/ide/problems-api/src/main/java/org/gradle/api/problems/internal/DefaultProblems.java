@@ -29,34 +29,34 @@ public class DefaultProblems implements InternalProblems {
 
     private final ProblemStream problemStream;
     private final CurrentBuildOperationRef currentBuildOperationRef;
-    private final BuildSessionProblemContainer buildSessionProblemContainer;
+    private final ExceptionProblemContainer exceptionProblemContainer;
     private final Collection<ProblemEmitter> emitter;
     private final InternalProblemReporter internalReporter;
     private final AdditionalDataBuilderFactory additionalDataBuilderFactory = new AdditionalDataBuilderFactory();
 
     public DefaultProblems(Collection<ProblemEmitter> emitter, CurrentBuildOperationRef currentBuildOperationRef) {
-        this(emitter, null, currentBuildOperationRef, new DefaultBuildSessionProblemContainer());
+        this(emitter, null, currentBuildOperationRef, new DefaultExceptionProblemContainer());
     }
 
     public DefaultProblems(Collection<ProblemEmitter> emitter) {
-        this(emitter, null, CurrentBuildOperationRef.instance(), new DefaultBuildSessionProblemContainer());
+        this(emitter, null, CurrentBuildOperationRef.instance(), new DefaultExceptionProblemContainer());
     }
 
-    public DefaultProblems(Collection<ProblemEmitter> emitter, ProblemStream problemStream, CurrentBuildOperationRef currentBuildOperationRef, BuildSessionProblemContainer buildSessionProblemContainer) {
+    public DefaultProblems(Collection<ProblemEmitter> emitter, ProblemStream problemStream, CurrentBuildOperationRef currentBuildOperationRef, ExceptionProblemContainer exceptionProblemContainer) {
         this.emitter = emitter;
         this.problemStream = problemStream;
         this.currentBuildOperationRef = currentBuildOperationRef;
-        this.buildSessionProblemContainer = buildSessionProblemContainer;
-        internalReporter = createReporter(emitter, problemStream, buildSessionProblemContainer);
+        this.exceptionProblemContainer = new DefaultExceptionProblemContainer();
+        internalReporter = createReporter(emitter, problemStream, exceptionProblemContainer);
     }
 
     @Override
     public ProblemReporter getReporter() {
-        return createReporter(emitter, problemStream, buildSessionProblemContainer);
+        return createReporter(emitter, problemStream, exceptionProblemContainer);
     }
 
-    private DefaultProblemReporter createReporter(Collection<ProblemEmitter> emitter, ProblemStream problemStream, BuildSessionProblemContainer buildSessionProblemContainer) {
-        return new DefaultProblemReporter(emitter, problemStream, currentBuildOperationRef, buildSessionProblemContainer, additionalDataBuilderFactory);
+    private DefaultProblemReporter createReporter(Collection<ProblemEmitter> emitter, ProblemStream problemStream, ExceptionProblemContainer exceptionProblemContainer) {
+        return new DefaultProblemReporter(emitter, problemStream, currentBuildOperationRef, exceptionProblemContainer, additionalDataBuilderFactory);
     }
 
     @Override

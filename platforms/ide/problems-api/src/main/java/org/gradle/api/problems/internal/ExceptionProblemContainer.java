@@ -24,13 +24,13 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * A container for problems that are associated with a build session.
+ * Holds references to exceptions reported via {@link org.gradle.problems.buildtree.ProblemReporter} and their associated problem reports.
  *
- * @since 8.11
+ * @since 8.12
  */
 @Incubating
-@ServiceScope(Scope.BuildSession.class)
-public interface BuildSessionProblemContainer {
+@ServiceScope(Scope.BuildTree.class)
+public interface ExceptionProblemContainer {
 
     void onProblem(Throwable exception, Problem problem);
 

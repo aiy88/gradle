@@ -29,14 +29,14 @@ public class DefaultProblemReporter implements InternalProblemReporter {
     private final Collection<ProblemEmitter> emitters;
     private final ProblemStream problemStream;
     private final CurrentBuildOperationRef currentBuildOperationRef;
-    private final BuildSessionProblemContainer problemContainer;
+    private final ExceptionProblemContainer problemContainer;
     private final AdditionalDataBuilderFactory additionalDataBuilderFactory;
 
     public DefaultProblemReporter(
         Collection<ProblemEmitter> emitters,
         ProblemStream problemStream,
         CurrentBuildOperationRef currentBuildOperationRef,
-        BuildSessionProblemContainer problemContainer,
+        ExceptionProblemContainer problemContainer,
         AdditionalDataBuilderFactory additionalDataBuilderFactory
     ) {
         this.emitters = emitters;

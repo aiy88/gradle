@@ -19,7 +19,7 @@ package org.gradle.plugin.devel.tasks.internal
 import com.google.gson.Gson
 import org.gradle.api.problems.Severity
 import org.gradle.api.problems.internal.AdditionalDataBuilderFactory
-import org.gradle.api.problems.internal.DefaultBuildSessionProblemContainer
+import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblemReporter
 import org.gradle.api.problems.internal.DeprecationData
 import org.gradle.api.problems.internal.DeprecationDataSpec
@@ -41,7 +41,7 @@ class ValidationProblemSerializationTest extends Specification {
         [Stub(ProblemEmitter)],
         null,
         CurrentBuildOperationRef.instance(),
-        new DefaultBuildSessionProblemContainer(),
+        new DefaultExceptionProblemContainer(),
         new AdditionalDataBuilderFactory()
     )
 
