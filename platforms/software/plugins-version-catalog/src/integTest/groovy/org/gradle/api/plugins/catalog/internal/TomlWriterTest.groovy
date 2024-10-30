@@ -22,9 +22,12 @@ import org.gradle.api.InvalidUserDataException
 import org.gradle.api.internal.catalog.DefaultVersionCatalog
 import org.gradle.api.internal.catalog.DefaultVersionCatalogBuilder
 import org.gradle.api.internal.catalog.parser.TomlCatalogFileParser
+import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.InternalProblems
-import org.gradle.api.problems.internal.NoOpProblemEmitter
+import org.gradle.api.problems.internal.ProblemEmitter
+import org.gradle.internal.operations.CurrentBuildOperationRef
+import org.gradle.internal.operations.OperationIdentifier
 import org.gradle.util.TestUtil
 import spock.lang.Specification
 import spock.lang.TempDir
@@ -105,8 +108,11 @@ format.version = "1.1"
 
     private Model parse(Path path) {
         def supplier = Stub(Supplier)
-        def problemEmitter = Stub(NoOpProblemEmitter)
-        def problems = new DefaultProblems([problemEmitter])
+        def problemEmitter = Stub(ProblemEmitter)
+        def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
+            getId() >> new OperationIdentifier(42)
+        }
+        def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
         def builder = new DefaultVersionCatalogBuilder(
             "libs",
             Interners.newStrongInterner(),

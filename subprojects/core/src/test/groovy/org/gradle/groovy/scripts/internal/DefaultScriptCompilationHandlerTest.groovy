@@ -33,6 +33,7 @@ import org.gradle.api.internal.initialization.ClassLoaderScope
 import org.gradle.api.internal.initialization.RootClassLoaderScope
 import org.gradle.api.internal.initialization.loadercache.DummyClassLoaderCache
 import org.gradle.api.problems.Problems
+import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.ProblemEmitter
 import org.gradle.configuration.ImportsReader
@@ -47,6 +48,8 @@ import org.gradle.internal.classpath.ClassPath
 import org.gradle.internal.classpath.DefaultClassPath
 import org.gradle.internal.hash.HashCode
 import org.gradle.internal.hash.Hashing
+import org.gradle.internal.operations.CurrentBuildOperationRef
+import org.gradle.internal.operations.OperationIdentifier
 import org.gradle.internal.reflect.JavaReflectionUtil
 import org.gradle.internal.resource.StringTextResource
 import org.gradle.internal.resource.TextResource
@@ -97,7 +100,10 @@ class DefaultScriptCompilationHandlerTest extends Specification {
 
     def setup() {
         def problemEmitter = Stub(ProblemEmitter)
-        def problems = new DefaultProblems([problemEmitter])
+        def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
+            getId() >> new OperationIdentifier(42)
+        }
+        def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
 
         File testProjectDir = tmpDir.createDir("projectDir")
         importsReader = Stub(ImportsReader.class)

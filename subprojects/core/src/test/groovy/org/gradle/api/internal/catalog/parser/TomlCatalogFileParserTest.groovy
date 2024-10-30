@@ -31,9 +31,12 @@ import org.gradle.api.internal.catalog.PluginModel
 import org.gradle.api.internal.catalog.problems.VersionCatalogErrorMessages
 import org.gradle.api.internal.catalog.problems.VersionCatalogProblemId
 import org.gradle.api.internal.catalog.problems.VersionCatalogProblemTestFor
+import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.InternalProblems
 import org.gradle.api.problems.internal.ProblemEmitter
+import org.gradle.internal.operations.CurrentBuildOperationRef
+import org.gradle.internal.operations.OperationIdentifier
 import org.gradle.util.TestUtil
 import spock.lang.Specification
 
@@ -43,9 +46,11 @@ import java.util.function.Supplier
 class TomlCatalogFileParserTest extends Specification implements VersionCatalogErrorMessages {
 
     def supplier = Stub(Supplier)
-    def problems = new DefaultProblems(
-        [Stub(ProblemEmitter)]
-    )
+    def problemEmitter = Stub(ProblemEmitter)
+    def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
+        getId() >> new OperationIdentifier(42)
+    }
+    def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
 
     def createVersionCatalogBuilder() {
         new DefaultVersionCatalogBuilder(

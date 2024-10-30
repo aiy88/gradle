@@ -32,19 +32,22 @@ import org.gradle.api.internal.artifacts.dsl.PublishArtifactNotationParserFactor
 import org.gradle.api.internal.artifacts.dsl.dependencies.DependencyLockingProvider
 import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.DefaultRootComponentMetadataBuilder
 import org.gradle.api.internal.attributes.AttributeDesugaring
-import org.gradle.api.internal.attributes.AttributesSchemaInternal
 import org.gradle.api.internal.attributes.AttributesFactory
+import org.gradle.api.internal.attributes.AttributesSchemaInternal
 import org.gradle.api.internal.file.TestFiles
 import org.gradle.api.internal.initialization.StandaloneDomainObjectContext
 import org.gradle.api.internal.project.ProjectStateRegistry
+import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
-import org.gradle.api.problems.internal.NoOpProblemEmitter
+import org.gradle.api.problems.internal.ProblemEmitter
 import org.gradle.api.provider.Provider
 import org.gradle.internal.artifacts.configurations.NoContextRoleBasedConfigurationCreationRequest
 import org.gradle.internal.code.UserCodeApplicationContext
 import org.gradle.internal.event.ListenerManager
 import org.gradle.internal.model.CalculatedValueContainerFactory
 import org.gradle.internal.operations.BuildOperationRunner
+import org.gradle.internal.operations.CurrentBuildOperationRef
+import org.gradle.internal.operations.OperationIdentifier
 import org.gradle.internal.reflect.Instantiator
 import org.gradle.internal.work.WorkerThreadRegistry
 import org.gradle.util.AttributeTestUtil
@@ -72,6 +75,10 @@ class DefaultConfigurationContainerTest extends Specification {
     private DefaultRootComponentMetadataBuilder.Factory rootComponentMetadataBuilderFactory = Mock(DefaultRootComponentMetadataBuilder.Factory) {
         create(_, _, _, _) >> metadataBuilder
     }
+    def problemEmitter = Stub(ProblemEmitter)
+    def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
+        getId() >> new OperationIdentifier(42)
+    }
     private DefaultConfigurationFactory configurationFactory = new DefaultConfigurationFactory(
         instantiator,
         resolver,
@@ -95,7 +102,7 @@ class DefaultConfigurationContainerTest extends Specification {
         TestUtil.domainObjectCollectionFactory(),
         calculatedValueContainerFactory,
         TestFiles.taskDependencyFactory(),
-        new DefaultProblems([new NoOpProblemEmitter()])
+        new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
     )
     private DefaultConfigurationContainer configurationContainer = instantiator.newInstance(DefaultConfigurationContainer.class,
         instantiator,

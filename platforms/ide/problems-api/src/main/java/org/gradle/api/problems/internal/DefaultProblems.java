@@ -34,14 +34,6 @@ public class DefaultProblems implements InternalProblems {
     private final InternalProblemReporter internalReporter;
     private final AdditionalDataBuilderFactory additionalDataBuilderFactory = new AdditionalDataBuilderFactory();
 
-    public DefaultProblems(Collection<ProblemEmitter> emitter, CurrentBuildOperationRef currentBuildOperationRef) {
-        this(emitter, null, currentBuildOperationRef, new DefaultExceptionProblemContainer());
-    }
-
-    public DefaultProblems(Collection<ProblemEmitter> emitter) {
-        this(emitter, null, CurrentBuildOperationRef.instance(), new DefaultExceptionProblemContainer());
-    }
-
     public DefaultProblems(Collection<ProblemEmitter> emitter, ProblemStream problemStream, CurrentBuildOperationRef currentBuildOperationRef, ExceptionProblemContainer exceptionProblemContainer) {
         this.emitter = emitter;
         this.problemStream = problemStream;

@@ -34,6 +34,7 @@ import org.gradle.api.internal.properties.GradleProperties
 import org.gradle.api.internal.provider.DefaultProviderFactory
 import org.gradle.api.internal.provider.DefaultValueSourceProviderFactory
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.InternalProblems
 import org.gradle.api.problems.internal.ProblemEmitter
@@ -43,6 +44,8 @@ import org.gradle.internal.event.DefaultListenerManager
 import org.gradle.internal.installation.CurrentGradleInstallation
 import org.gradle.internal.isolation.TestIsolatableFactory
 import org.gradle.internal.management.VersionCatalogBuilderInternal
+import org.gradle.internal.operations.CurrentBuildOperationRef
+import org.gradle.internal.operations.OperationIdentifier
 import org.gradle.internal.service.scopes.Scope
 import org.gradle.process.ExecOperations
 import org.gradle.test.fixtures.file.TestNameTestDirectoryProvider
@@ -387,7 +390,11 @@ ${nameClash { noIntro().kind('dependency bundles').inConflict('one.cool', 'oneCo
     }
 
     private void generate(String className = 'Generated', @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = VersionCatalogBuilderInternal) Closure<Void> spec) {
-        def problems = new DefaultProblems([Stub(ProblemEmitter)])
+        def problemEmitter = Stub(ProblemEmitter)
+        def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
+            getId() >> new OperationIdentifier(42)
+        }
+        def problems = new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
         DefaultVersionCatalogBuilder builder = new DefaultVersionCatalogBuilder(
             "lib",
             Interners.newStrongInterner(),

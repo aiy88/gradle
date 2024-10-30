@@ -65,8 +65,9 @@ import org.gradle.api.internal.initialization.StandaloneDomainObjectContext
 import org.gradle.api.internal.project.ProjectIdentity
 import org.gradle.api.internal.project.ProjectStateRegistry
 import org.gradle.api.internal.tasks.TaskDependencyResolveContext
+import org.gradle.api.problems.internal.DefaultExceptionProblemContainer
 import org.gradle.api.problems.internal.DefaultProblems
-import org.gradle.api.problems.internal.NoOpProblemEmitter
+import org.gradle.api.problems.internal.ProblemEmitter
 import org.gradle.api.specs.Spec
 import org.gradle.api.tasks.TaskDependency
 import org.gradle.internal.Factories
@@ -78,6 +79,8 @@ import org.gradle.internal.event.AnonymousListenerBroadcast
 import org.gradle.internal.event.ListenerManager
 import org.gradle.internal.locking.DefaultDependencyLockingState
 import org.gradle.internal.model.CalculatedValueContainerFactory
+import org.gradle.internal.operations.CurrentBuildOperationRef
+import org.gradle.internal.operations.OperationIdentifier
 import org.gradle.internal.operations.TestBuildOperationRunner
 import org.gradle.internal.reflect.DirectInstantiator
 import org.gradle.internal.reflect.Instantiator
@@ -1810,6 +1813,10 @@ class DefaultConfigurationSpec extends Specification {
             TestFiles.resolver(),
             TestFiles.taskDependencyFactory(),
         )
+        def problemEmitter = Stub(ProblemEmitter)
+        def currentBuildOperationRef = Mock(CurrentBuildOperationRef) {
+            getId() >> new OperationIdentifier(42)
+        }
         new DefaultConfigurationFactory(
             DirectInstantiator.INSTANCE,
             resolver,
@@ -1828,7 +1835,7 @@ class DefaultConfigurationSpec extends Specification {
             TestUtil.domainObjectCollectionFactory(),
             calculatedValueContainerFactory,
             TestFiles.taskDependencyFactory(),
-            new DefaultProblems([new NoOpProblemEmitter()])
+            new DefaultProblems([problemEmitter], null, currentBuildOperationRef, new DefaultExceptionProblemContainer())
         )
     }
 
