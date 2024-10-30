@@ -37,7 +37,6 @@ public interface Problem {
      * @return the definition
      * @since 8.12
      */
-    @Incubating
     ProblemDefinition getDefinition();
 
     /**
@@ -46,7 +45,6 @@ public interface Problem {
      * @return the problem label
      * @since 8.12
      */
-    @Incubating
     ContextualLabel getContextualLabel();
 
     /**
@@ -55,7 +53,6 @@ public interface Problem {
      * @return the problem details
      * @since 8.12
      */
-    @Incubating
     Details getDetails();
 
     /**
@@ -64,7 +61,6 @@ public interface Problem {
      * @return the locations
      * @since 8.12
      */
-    @Incubating
     List<Location> getLocations();
 
     /**
@@ -73,7 +69,6 @@ public interface Problem {
      * @return the solutions
      * @since 8.12
      */
-    @Incubating
     List<Solution> getSolutions();
 
     /**
@@ -82,7 +77,6 @@ public interface Problem {
      * @return the failure
      * @since 8.12
      */
-    @Incubating
     @Nullable
     Failure getFailure();
 
@@ -92,6 +86,5 @@ public interface Problem {
      * @return the additional data
      * @since 8.12
      */
-    @Incubating
     AdditionalData getAdditionalData();
 }
