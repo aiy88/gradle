@@ -21,7 +21,7 @@ import org.gradle.integtests.tooling.fixture.ToolingApiSpecification
 import org.gradle.integtests.tooling.fixture.ToolingApiVersion
 import org.gradle.tooling.Failure
 import org.gradle.tooling.GradleConnectionException
-import spock.lang.Ignore
+import org.junit.Ignore
 
 @ToolingApiVersion('>=8.12')
 @TargetGradleVersion('>=8.12')
@@ -101,7 +101,7 @@ class BuildFailureProblemsCrossVersionSpec extends ToolingApiSpecification {
     }
 
 
-    @Ignore("TODO (donat) investigate why the problems from worker don't work")
+    @Ignore("TODO (donat) the problems API has the exception->problem association, but the worker serializes the thrown exception separately. The serialized exception instance does not equal to the one stored in the problems service")
     def "failure from worker using process isolation"() {
         setup:
         file('buildSrc/build.gradle') << """
