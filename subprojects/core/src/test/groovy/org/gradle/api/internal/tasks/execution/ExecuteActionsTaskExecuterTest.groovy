@@ -29,6 +29,11 @@ import org.gradle.api.internal.tasks.TaskExecutionContext
 import org.gradle.api.internal.tasks.TaskExecutionOutcome
 import org.gradle.api.internal.tasks.TaskStateInternal
 import org.gradle.api.internal.tasks.properties.TaskProperties
+import org.gradle.api.problems.internal.DefaultBuildSessionExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildTreeExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultProblems
+import org.gradle.api.problems.internal.NoOpProblemEmitter
+import org.gradle.api.problems.internal.ProblemsProgressEventEmitterHolder
 import org.gradle.api.tasks.StopActionException
 import org.gradle.api.tasks.StopExecutionException
 import org.gradle.api.tasks.TaskExecutionException
@@ -62,6 +67,7 @@ import org.gradle.internal.id.UniqueId
 import org.gradle.internal.logging.StandardOutputCapture
 import org.gradle.internal.operations.BuildOperationContext
 import org.gradle.internal.operations.BuildOperationRunner
+import org.gradle.internal.operations.CurrentBuildOperationRef
 import org.gradle.internal.operations.RunnableBuildOperation
 import org.gradle.internal.operations.TestBuildOperationRunner
 import org.gradle.internal.snapshot.impl.ClassImplementationSnapshot
@@ -187,6 +193,16 @@ class ExecuteActionsTaskExecuterTest extends Specification {
         executionContext.getValidationAction() >> { { c -> } as TaskExecutionContext.ValidationAction }
         executionHistoryStore.load("task") >> Optional.of(previousState)
         taskProperties.getOutputFileProperties() >> ImmutableSortedSet.of()
+        ProblemsProgressEventEmitterHolder.init(
+            new DefaultProblems(
+                Arrays.asList(new NoOpProblemEmitter()),
+                null,
+                CurrentBuildOperationRef.instance(),
+                new DefaultBuildTreeExceptionProblemContainer(
+                    new DefaultBuildSessionExceptionProblemContainer()
+                )
+            )
+        )
     }
 
     void noMoreInteractions() {
