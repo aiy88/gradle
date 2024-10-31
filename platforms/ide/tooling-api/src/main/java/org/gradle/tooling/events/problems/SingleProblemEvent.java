@@ -57,12 +57,18 @@ public interface SingleProblemEvent extends ProblemEvent {
     Details getDetails();
 
     /**
-     * Returns the locations associated with this problem.
+     * Returns the locations where the problem originated.
      *
-     * @return the locations
-     * @since 8.8
+     * @return the origin locations
      */
-    List<Location> getLocations();
+    List<Location> getOriginLocation();
+
+    /**
+     * Returns additional locations where the problem could be attributed to.
+     *
+     * @return the attributed locations
+     */
+    List<Location> getAttributedLocations();
 
     /**
      * Returns the list of solutions.

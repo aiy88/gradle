@@ -89,10 +89,12 @@ public class DefaultSingleProblemEvent extends BaseProgressEvent implements Sing
             .build();
     }
 
+    @Override
     public List<Location> getOriginLocation() {
         return originLocation;
     }
 
+    @Override
     public List<Location> getAttributedLocations() {
         return attributedLocations;
     }
