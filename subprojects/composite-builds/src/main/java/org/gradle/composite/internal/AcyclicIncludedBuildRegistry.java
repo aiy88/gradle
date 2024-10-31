@@ -50,7 +50,7 @@ public class AcyclicIncludedBuildRegistry extends DefaultIncludedBuildRegistry {
         return includedBuild;
     }
 
-    private boolean isReferredFromPluginBuild(BuildState referrer) {
+    private static boolean isReferredFromPluginBuild(BuildState referrer) {
         return referrer instanceof IncludedBuildState && ((IncludedBuildState) referrer).isPluginBuild();
     }
 
