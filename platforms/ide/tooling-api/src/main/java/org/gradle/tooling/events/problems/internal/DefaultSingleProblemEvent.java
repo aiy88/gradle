@@ -37,7 +37,7 @@ public class DefaultSingleProblemEvent extends BaseProgressEvent implements Sing
     private final ProblemDefinition problemDefinition;
     private final ContextualLabel contextualLabel;
     private final Details details;
-    private final List<Location> originLocation;
+    private final List<Location> originLocations;
     private final List<Location> attributedLocations;
     private final List<Solution> solutions;
     private final AdditionalData additionalData;
@@ -58,7 +58,7 @@ public class DefaultSingleProblemEvent extends BaseProgressEvent implements Sing
         this.problemDefinition = problemDefinition;
         this.contextualLabel = contextualLabel;
         this.details = details;
-        this.originLocation = originLocations;
+        this.originLocations = originLocations;
         this.attributedLocations = attributedLocations;
         this.solutions = solutions;
         this.additionalData = additionalData;
@@ -81,22 +81,13 @@ public class DefaultSingleProblemEvent extends BaseProgressEvent implements Sing
     }
 
     @Override
-    public List<Location> getLocations() {
-        return ImmutableList
-            .<Location>builder()
-            .addAll(originLocation)
-            .addAll(attributedLocations)
-            .build();
-    }
-
-    @Override
-    public List<Location> getOriginLocation() {
-        return originLocation;
+    public List<Location> getOriginLocations() {
+        return ImmutableList.copyOf(originLocations);
     }
 
     @Override
     public List<Location> getAttributedLocations() {
-        return attributedLocations;
+        return ImmutableList.copyOf(attributedLocations);
     }
 
     @Override
