@@ -20,7 +20,12 @@ import com.google.common.collect.ImmutableList
 import com.google.common.collect.Iterables
 import org.gradle.api.internal.file.TestFiles
 import org.gradle.api.problems.Severity
+import org.gradle.api.problems.internal.DefaultBuildSessionExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildTreeExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.GradleCoreProblemGroup
+import org.gradle.api.problems.internal.NoOpProblemEmitter
+import org.gradle.api.problems.internal.ProblemsProgressEventEmitterHolder
 import org.gradle.cache.Cache
 import org.gradle.cache.ManualEvictionInMemoryCache
 import org.gradle.caching.internal.controller.BuildCacheController
@@ -42,6 +47,7 @@ import org.gradle.internal.hash.ClassLoaderHierarchyHasher
 import org.gradle.internal.hash.HashCode
 import org.gradle.internal.hash.TestHashCodes
 import org.gradle.internal.id.UniqueId
+import org.gradle.internal.operations.CurrentBuildOperationRef
 import org.gradle.internal.operations.TestBuildOperationRunner
 import org.gradle.internal.reflect.validation.ValidationMessageChecker
 import org.gradle.internal.snapshot.SnapshotVisitorUtil
@@ -120,6 +126,19 @@ class IncrementalExecutionIntegrationTest extends Specification implements Valid
             overlappingOutputDetector,
             validationWarningReporter,
             virtualFileSystem
+        )
+    }
+
+    def setup() {
+        ProblemsProgressEventEmitterHolder.init(
+            new DefaultProblems(
+                Arrays.asList(new NoOpProblemEmitter()),
+                null,
+                CurrentBuildOperationRef.instance(),
+                new DefaultBuildTreeExceptionProblemContainer(
+                    new DefaultBuildSessionExceptionProblemContainer()
+                )
+            )
         )
     }
 

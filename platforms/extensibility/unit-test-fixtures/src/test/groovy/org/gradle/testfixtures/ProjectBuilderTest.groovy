@@ -21,8 +21,14 @@ import org.gradle.api.Project
 import org.gradle.api.internal.project.DefaultProject
 import org.gradle.api.logging.configuration.WarningMode
 import org.gradle.api.problems.Problems
+import org.gradle.api.problems.internal.DefaultBuildSessionExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildTreeExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultProblems
+import org.gradle.api.problems.internal.NoOpProblemEmitter
+import org.gradle.api.problems.internal.ProblemsProgressEventEmitterHolder
 import org.gradle.internal.deprecation.DeprecationLogger
 import org.gradle.internal.operations.BuildOperationProgressEventEmitter
+import org.gradle.internal.operations.CurrentBuildOperationRef
 import org.gradle.problems.buildtree.ProblemStream
 import org.gradle.test.fixtures.file.LeaksFileHandles
 import org.gradle.test.fixtures.file.TestNameTestDirectoryProvider
@@ -41,8 +47,20 @@ class ProjectBuilderTest extends Specification {
     @Rule
     public final Resources resources = new Resources()
 
-    def "can create a root project"() {
+    def setup() {
+        ProblemsProgressEventEmitterHolder.init(
+            new DefaultProblems(
+                Arrays.asList(new NoOpProblemEmitter()),
+                null,
+                CurrentBuildOperationRef.instance(),
+                new DefaultBuildTreeExceptionProblemContainer(
+                    new DefaultBuildSessionExceptionProblemContainer()
+                )
+            )
+        )
+    }
 
+    def "can create a root project"() {
         when:
         def project = ProjectBuilder.builder().build()
 
@@ -59,7 +77,6 @@ class ProjectBuilderTest extends Specification {
     }
 
     def "can create a child project"() {
-
         when:
         def root = ProjectBuilder.builder().build()
         def child = ProjectBuilder.builder().withParent(root).build()

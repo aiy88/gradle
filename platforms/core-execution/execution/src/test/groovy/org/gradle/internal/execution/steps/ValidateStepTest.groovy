@@ -17,13 +17,19 @@
 package org.gradle.internal.execution.steps
 
 import org.gradle.api.problems.Severity
+import org.gradle.api.problems.internal.DefaultBuildSessionExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultBuildTreeExceptionProblemContainer
+import org.gradle.api.problems.internal.DefaultProblems
 import org.gradle.api.problems.internal.GradleCoreProblemGroup
+import org.gradle.api.problems.internal.NoOpProblemEmitter
 import org.gradle.api.problems.internal.Problem
+import org.gradle.api.problems.internal.ProblemsProgressEventEmitterHolder
 import org.gradle.internal.execution.WorkValidationContext
 import org.gradle.internal.execution.WorkValidationException
 import org.gradle.internal.execution.WorkValidationExceptionChecker
 import org.gradle.internal.execution.impl.DefaultWorkValidationContext
 import org.gradle.internal.operations.BuildOperationProgressEventEmitter
+import org.gradle.internal.operations.CurrentBuildOperationRef
 import org.gradle.internal.reflect.validation.ValidationMessageChecker
 import org.gradle.internal.vfs.VirtualFileSystem
 
@@ -44,6 +50,16 @@ class ValidateStepTest extends StepSpec<BeforeExecutionContext> implements Valid
     def setup() {
         def validationContext = new DefaultWorkValidationContext(WorkValidationContext.TypeOriginInspector.NO_OP)
         context.getValidationContext() >> validationContext
+        ProblemsProgressEventEmitterHolder.init(
+            new DefaultProblems(
+                Arrays.asList(new NoOpProblemEmitter()),
+                null,
+                CurrentBuildOperationRef.instance(),
+                new DefaultBuildTreeExceptionProblemContainer(
+                    new DefaultBuildSessionExceptionProblemContainer()
+                )
+            )
+        )
     }
 
     def "executes work when there are no violations"() {
