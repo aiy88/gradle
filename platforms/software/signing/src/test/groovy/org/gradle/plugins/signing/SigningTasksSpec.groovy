@@ -44,7 +44,7 @@ class SigningTasksSpec extends SigningProjectSpec {
         signingTasks.every { it.singleSignature in configurations.signatures.artifacts }
 
         and:
-        signingTasks.every { it.signatory == signing.signatory }
+        signingTasks.every { it.getSignatory() == signing.getSignatory() }
     }
 
     def "sign method return values"() {

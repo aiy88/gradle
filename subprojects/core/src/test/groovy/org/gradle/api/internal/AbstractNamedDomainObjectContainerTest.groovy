@@ -287,7 +287,7 @@ class AbstractNamedDomainObjectContainerTest extends Specification {
 
         and:
         !provider.present
-        provider.orNull == null
+        provider.getOrNull() == null
 
         when:
         provider.get()
@@ -312,7 +312,7 @@ class AbstractNamedDomainObjectContainerTest extends Specification {
 
         and:
         !provider.present
-        provider.orNull == null
+        provider.getOrNull() == null
 
         when:
         provider.get()
@@ -339,7 +339,7 @@ class AbstractNamedDomainObjectContainerTest extends Specification {
 
         and:
         !provider.present
-        provider.orNull == null
+        provider.getOrNull() == null
 
         when:
         provider.get()
@@ -366,7 +366,7 @@ class AbstractNamedDomainObjectContainerTest extends Specification {
 
         and:
         !provider.present
-        provider.orNull == null
+        provider.getOrNull() == null
 
         when:
         provider.get()

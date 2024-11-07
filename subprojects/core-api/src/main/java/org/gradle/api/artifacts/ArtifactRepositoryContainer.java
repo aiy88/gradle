@@ -32,7 +32,7 @@ import org.gradle.util.Configurable;
  * resolver as the property name. For example:</p>
  *
  * <pre class='autoTested'>
- * repositories.maven { name 'myResolver' }
+ * repositories.maven { name = 'myResolver' }
  * repositories.myResolver.url = uri('some-url')
  * </pre>
  *
@@ -40,7 +40,7 @@ import org.gradle.util.Configurable;
  * {@link #getByName(String, groovy.lang.Closure)}. For example:</p>
  *
  * <pre class='autoTested'>
- * repositories.maven { name 'myResolver' }
+ * repositories.maven { name = 'myResolver' }
  * repositories.myResolver {
  *     url = uri('some-url')
  * }

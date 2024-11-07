@@ -174,17 +174,17 @@ public class DefaultMavenArtifactRepository extends AbstractAuthenticationSuppor
         return urlArtifactRepository.getUrl();
     }
 
-    /**
-     * This method exists only to support the deprecated `url "some-string"` syntax in Groovy.
-     * @deprecated Use {@link #getUrl()} property instead.
-     **/
-    @Deprecated
-    protected void url(Object url) {
-        // TODO: fix it in 9.0
-        // can't deprecate it yet since it's used in our smoke-tested plugins
-        // ProviderApiDeprecationLogger.logDeprecation(MavenArtifactRepository.class, "setUrl(Object) configuration with `url Object` syntax", "getUrl");
-        getUrl().set(providerFactory.provider(() -> fileResolver.resolveUri(url)));
-    }
+//    /**
+//     * This method exists only to support the deprecated `url "some-string"` syntax in Groovy.
+//     * @deprecated Use {@link #getUrl()} property instead.
+//     **/
+//    @Deprecated
+//    protected void url(Object url) {
+//        // TODO: fix it in 9.0
+//        // can't deprecate it yet since it's used in our smoke-tested plugins
+//        // ProviderApiDeprecationLogger.logDeprecation(MavenArtifactRepository.class, "setUrl(Object) configuration with `url Object` syntax", "getUrl");
+//        getUrl().set(providerFactory.provider(() -> fileResolver.resolveUri(url)));
+//    }
 
     @Override
     @ReplacesEagerProperty(originalType = boolean.class)

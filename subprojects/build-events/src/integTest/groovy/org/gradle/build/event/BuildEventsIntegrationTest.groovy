@@ -212,7 +212,7 @@ class BuildEventsIntegrationTest extends AbstractIntegrationSpec {
         def initScript = initScriptFile
         loggingListener(initScript)
         initScript << """
-            if (gradle.parent == null) {
+            if (gradle.getParent() == null) {
                 def listener = gradle.sharedServices.registerIfAbsent("listener", LoggingListener) { }
                 services.get(${BuildEventsListenerRegistry.name}).onTaskCompletion(listener)
             }

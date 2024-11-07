@@ -155,11 +155,11 @@ class ObjectExtensionInstantiationIntegrationTest extends AbstractIntegrationSpe
             }
 
             extensions.create("thing", Thing)
-            assert thing.value == ${defaultValue}
+            assert thing.getValue() == ${defaultValue}
             thing {
                 value = ${newValue}
             }
-            assert thing.value == ${newValue}
+            assert thing.getValue() == ${newValue}
         """
 
         expect:
@@ -430,11 +430,11 @@ class ObjectExtensionInstantiationIntegrationTest extends AbstractIntegrationSpe
             }
 
             extensions.create("thing", Thing)
-            assert thing.value == null
+            assert thing.getValue() == null
             thing {
                 value = "123"
             }
-            assert thing.value == "123"
+            assert thing.getValue() == "123"
         """
 
         expect:

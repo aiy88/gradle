@@ -28,10 +28,10 @@ class ProjectBuildFileIntegrationTest extends AbstractIntegrationSpec {
         createDirs("child")
         settingsFile << "include 'child'"
         def initScript = file("init.gradle") << """
-            rootProject { 
+            rootProject {
                 assert buildFile.canonicalPath == '${buildFile.canonicalPath.replace("\\", "\\\\")}'
                 assert project(":child").buildFile.canonicalPath == '${file("child/build.gradle").canonicalPath.replace("\\", "\\\\")}'
-                println "init script applied" 
+                println "init script applied"
             }
         """
 
@@ -50,10 +50,10 @@ class ProjectBuildFileIntegrationTest extends AbstractIntegrationSpec {
 
         when:
         executer.gradleUserHomeDir.file("init.d/init.gradle") << """
-            rootProject { 
-                if (project.gradle.parent != null) { // is buildSrc build
+            rootProject {
+                if (project.gradle.getParent() != null) { // is buildSrc build
                     assert buildFile.canonicalPath == '${file("buildSrc/build.gradle").canonicalPath.replace("\\", "\\\\")}'
-                    println "init script applied" 
+                    println "init script applied"
                 }
             }
         """

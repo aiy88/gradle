@@ -48,7 +48,7 @@ class CompositeBuildEventsIntegrationTest extends AbstractCompositeBuildIntegrat
             gradle.addBuildListener(new LoggingBuildListener())
             class LoggingBuildListener extends BuildAdapter {
                 void settingsEvaluated(Settings settings) {
-                    def buildName = settings.gradle.parent == null ? '' : settings.rootProject.name
+                    def buildName = settings.gradle.getParent() == null ? '' : settings.rootProject.name
                     println '# buildListener.settingsEvaluated [:' + buildName + ']'
                 }
                 void projectsLoaded(Gradle gradle) {

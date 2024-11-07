@@ -642,6 +642,14 @@ class HasConfigurationCacheProblemsSpec {
         }
     }
 
+    public Integer getTotalProblemsCount() {
+        return totalProblemsCount
+    }
+
+    public Integer getProblemsWithStackTraceCount() {
+        return problemsWithStackTraceCount
+    }
+
     @PackageScope
     boolean hasProblems() {
         return !uniqueProblems.isEmpty() || totalProblemsCount > 0

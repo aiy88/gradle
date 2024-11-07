@@ -44,7 +44,7 @@ class JavaCompileTest extends AbstractProjectBuilderSpec {
         then:
         spec.sourceCompatibility == Jvm.current().javaVersion.toString()
         spec.targetCompatibility == Jvm.current().javaVersion.toString()
-        spec.compileOptions.forkOptions.javaHome == null
+        spec.compileOptions.forkOptions.getJavaHome() == null
         spec.compileOptions.forkOptions.executable == null
         actualCompiler.metadata.installationPath.toString() == javaHome.toString()
     }
@@ -171,8 +171,8 @@ class JavaCompileTest extends AbstractProjectBuilderSpec {
         spec.release == 9
         spec.sourceCompatibility == null
         spec.targetCompatibility == null
-        spec.compileOptions.forkOptions.javaHome == null
-        (spec as ForkingJavaCompileSpec).javaHome == javaHome
+        spec.compileOptions.forkOptions.getJavaHome() == null
+        (spec as ForkingJavaCompileSpec).getJavaHome() == javaHome
     }
 
     def 'uses custom source and target compatibility combined with toolchain compiler'() {
@@ -197,8 +197,8 @@ class JavaCompileTest extends AbstractProjectBuilderSpec {
         then:
         spec.sourceCompatibility == '11'
         spec.targetCompatibility == '14'
-        spec.compileOptions.forkOptions.javaHome == null
-        (spec as ForkingJavaCompileSpec).javaHome == javaHome
+        spec.compileOptions.forkOptions.getJavaHome() == null
+        (spec as ForkingJavaCompileSpec).getJavaHome() == javaHome
     }
 
     def 'source compatibility serves as target compatibility fallback on compile spec'() {
@@ -261,8 +261,8 @@ class JavaCompileTest extends AbstractProjectBuilderSpec {
         spec.sourceCompatibility == JavaVersion.toVersion(toolchainVersion).toString()
         spec.targetCompatibility == JavaVersion.toVersion(toolchainVersion).toString()
         spec.release == null
-        spec.compileOptions.forkOptions.javaHome == null
-        (spec as ForkingJavaCompileSpec).javaHome == javaHome
+        spec.compileOptions.forkOptions.getJavaHome() == null
+        (spec as ForkingJavaCompileSpec).getJavaHome() == javaHome
 
         where:
         toolchainVersion << [8, 9, 10, 11]

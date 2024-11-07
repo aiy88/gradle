@@ -17,7 +17,7 @@
 package org.gradle.api
 
 import org.gradle.integtests.fixtures.AbstractIntegrationSpec
-import spock.lang.Ignore
+import org.junit.Ignore
 
 class MavenRepositoryConfigurationTest extends AbstractIntegrationSpec {
 

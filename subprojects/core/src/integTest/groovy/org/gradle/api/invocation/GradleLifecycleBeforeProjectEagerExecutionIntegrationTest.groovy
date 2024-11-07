@@ -105,7 +105,7 @@ class GradleLifecycleBeforeProjectEagerExecutionIntegrationTest extends Abstract
             "setGroup('foo')",
             "version",
             "setVersion('foo')",
-            "description",
+            "getDescription()",
             "setDescription('foo')",
             "status",
             "evaluate()",

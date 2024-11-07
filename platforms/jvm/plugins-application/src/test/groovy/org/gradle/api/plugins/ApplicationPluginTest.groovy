@@ -39,7 +39,7 @@ class ApplicationPluginTest extends AbstractProjectBuilderSpec {
 
         project.convention.getPlugin(ApplicationPluginConvention.class) != null
         project.applicationName == project.name
-        project.mainClassName == null
+        project.getMainClassName() == null
         project.applicationDefaultJvmArgs == []
         project.applicationDistribution instanceof CopySpec
 

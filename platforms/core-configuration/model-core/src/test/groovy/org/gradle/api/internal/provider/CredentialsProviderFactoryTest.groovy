@@ -138,7 +138,7 @@ class CredentialsProviderFactoryTest extends Specification {
         then:
         credentials.secretKey == 'secret'
         credentials.accessKey == 'access'
-        credentials.sessionToken == null
+        credentials.getSessionToken() == null
     }
 
     def "allows setting sessionToken for aws provider"() {

@@ -94,7 +94,7 @@ class OriginFixture extends UserInitScriptExecuterFixture {
                 }
             }
 
-            if (gradle.parent == null) {
+            if (gradle.getParent() == null) {
                 def collector = gradle.sharedServices.registerIfAbsent("originsCollector", OriginCollector) {
                     parameters.originJson.fileValue(new File("${TextUtil.normaliseFileSeparators(file.absolutePath)}"))
                 }

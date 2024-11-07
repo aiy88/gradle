@@ -27,8 +27,8 @@ class CompositeBuildIsolationIntegrationTest extends AbstractIntegrationSpec {
                 apply plugin: 'java'
 
                 def rootGradleBuild = gradle
-                while (rootGradleBuild.parent != null) {
-                    rootGradleBuild = rootGradleBuild.parent
+                while (rootGradleBuild.getParent() != null) {
+                    rootGradleBuild = rootGradleBuild.getParent()
                 }
                 assert rootGradleBuild.rootProject.name == "root"
             """
@@ -59,8 +59,8 @@ class CompositeBuildIsolationIntegrationTest extends AbstractIntegrationSpec {
                 apply plugin: 'java'
 
                 def rootGradleBuild = gradle
-                while (rootGradleBuild.parent != null) {
-                    rootGradleBuild = rootGradleBuild.parent
+                while (rootGradleBuild.getParent() != null) {
+                    rootGradleBuild = rootGradleBuild.getParent()
                 }
                 assert rootGradleBuild.rootProject.name == "root"
             """

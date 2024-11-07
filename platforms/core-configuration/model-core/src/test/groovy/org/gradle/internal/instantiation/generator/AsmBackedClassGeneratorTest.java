@@ -936,35 +936,6 @@ public class AsmBackedClassGeneratorTest {
     }
 
     @Test
-    public void mixesInSetValueMethodForSingleValuedProperty() throws Exception {
-        BeanWithVariousGettersAndSetters bean = newInstance(BeanWithVariousGettersAndSetters.class);
-
-        call("{ it.prop 'value'}", bean);
-        assertThat(bean.getProp(), equalTo("value"));
-
-        call("{ it.finalGetter 'another'}", bean);
-        assertThat(bean.getFinalGetter(), equalTo("another"));
-
-        call("{ it.writeOnly 12}", bean);
-        assertThat(bean.writeOnly, equalTo(12));
-
-        call("{ it.primitive 12}", bean);
-        assertThat(bean.getPrimitive(), equalTo(12));
-
-        call("{ it.bool true}", bean);
-        assertThat(bean.isBool(), equalTo(true));
-
-        call("{ it.overloaded 'value'}", bean);
-        assertThat(bean.getOverloaded(), equalTo("chars = value"));
-
-        call("{ it.overloaded 12}", bean);
-        assertThat(bean.getOverloaded(), equalTo("number = 12"));
-
-        call("{ it.overloaded true}", bean);
-        assertThat(bean.getOverloaded(), equalTo("object = true"));
-    }
-
-    @Test
     public void doesNotUseConventionValueOnceSetValueMethodHasBeenCalled() throws Exception {
         Bean bean = newInstance(Bean.class);
         IConventionAware conventionAware = (IConventionAware) bean;
@@ -976,7 +947,7 @@ public class AsmBackedClassGeneratorTest {
 
         assertThat(bean.getProp(), equalTo("[default]"));
 
-        call("{ it.prop 'value'}", bean);
+        call("{ it.prop = 'value'}", bean);
         assertThat(bean.getProp(), equalTo("value"));
     }
 
@@ -1005,51 +976,11 @@ public class AsmBackedClassGeneratorTest {
     }
 
     @Test
-    public void overridesExistingSetValueMethod() throws Exception {
-        BeanWithDslMethods bean = newInstance(BeanWithDslMethods.class);
-        IConventionAware conventionAware = (IConventionAware) bean;
-        conventionAware.getConventionMapping().map("prop", new Callable<Object>() {
-            public Object call() throws Exception {
-                return "[default]";
-            }
-        });
-
-        assertThat(bean.getProp(), equalTo("[default]"));
-
-        assertThat(call("{ it.prop 'value'}", bean), sameInstance((Object) bean));
-        assertThat(bean.getProp(), equalTo("[value]"));
-
-        assertThat(call("{ it.prop 1.2}", bean), sameInstance((Object) bean));
-        assertThat(bean.getProp(), equalTo("<1.2>"));
-
-        assertThat(call("{ it.prop 1}", bean), nullValue());
-        assertThat(bean.getProp(), equalTo("<1>"));
-
-        // failing, seems to be that set method override doesn't work for iterables - GRADLE-2097
-        //assertThat(call("{ bean, list -> bean.things(list) }", bean, new LinkedList<Object>()), nullValue());
-        //assertThat(bean.getThings().size(), equalTo(0));
-
-        //assertThat(call("{ bean -> bean.things([1,2,3]) }", bean), nullValue());
-        //assertThat(bean.getThings().size(), equalTo(3));
-
-        //FileCollection files = ProjectBuilder.builder().build().files();
-        //assertThat(call("{ bean, fc -> bean.files fc}", bean, files), nullValue());
-        //assertThat(bean.getFiles(), sameInstance(files));
-    }
-
-    @Test
     public void addsInsteadOfOverridesSetValueMethodIfOnlyMultiArgMethods() throws Exception {
         BeanWithMultiArgDslMethods bean = newInstance(BeanWithMultiArgDslMethods.class);
         // this method should have been added to the class
-        call("{ it.prop 'value'}", bean);
+        call("{ it.prop = 'value'}", bean);
         assertThat(bean.getProp(), equalTo("value"));
-    }
-
-    @Test
-    public void doesNotOverrideSetValueMethodForPropertyThatIsNotConventionMappingAware() throws Exception {
-        BeanWithMultiArgDslMethodsAndNoConventionMapping bean = newInstance(BeanWithMultiArgDslMethodsAndNoConventionMapping.class);
-        call("{ it.prop 'value'}", bean);
-        assertThat(bean.getProp(), equalTo("(value)"));
     }
 
     @Test

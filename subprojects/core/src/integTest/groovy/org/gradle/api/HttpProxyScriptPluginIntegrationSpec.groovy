@@ -46,7 +46,7 @@ class HttpProxyScriptPluginIntegrationSpec extends AbstractIntegrationSpec {
 
         script << """
             task doStuff
-            assert buildscript.sourceFile == null
+            assert buildscript.getSourceFile() == null
             assert "${server.uri}/external.gradle" == buildscript.sourceURI as String
 """
 

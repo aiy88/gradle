@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 import gradlebuild.EnrichedReportRenderer
 import gradlebuild.basics.GradleModuleApiAttribute
 import gradlebuild.basics.PublicApi
@@ -24,7 +25,6 @@ import gradlebuild.binarycompatibility.CleanAcceptedApiChanges
 import gradlebuild.binarycompatibility.transforms.ExplodeZipAndFindJars
 import gradlebuild.binarycompatibility.transforms.FindGradleClasspath
 import gradlebuild.binarycompatibility.transforms.FindGradleJars
-import gradlebuild.identity.provider.LatestNightlyVersionValueSource
 
 plugins {
     id("gradlebuild.module-identity")
@@ -33,7 +33,7 @@ plugins {
 repositories {
     ['distributions', 'distributions-snapshots'].each { distUrl ->
         ivy {
-            name 'Gradle distributions'
+            name = 'Gradle distributions'
             url = uri('https://services.gradle.org')
             patternLayout {
                 artifact "/${distUrl}/[module]-[revision]-bin(.[ext])"

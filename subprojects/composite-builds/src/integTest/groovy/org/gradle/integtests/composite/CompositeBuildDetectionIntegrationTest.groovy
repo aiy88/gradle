@@ -38,7 +38,7 @@ class CompositeBuildDetectionIntegrationTest extends AbstractCompositeBuildInteg
                 !gradle.includedBuilds.empty
             }
             def isNested(gradle) {
-                gradle.parent != null
+                gradle.getParent() != null
             }
 """
         buildA.buildFile << detectionMethods

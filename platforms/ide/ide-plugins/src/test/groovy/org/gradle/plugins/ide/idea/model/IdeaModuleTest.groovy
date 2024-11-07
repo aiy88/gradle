@@ -36,7 +36,7 @@ class IdeaModuleTest extends AbstractProjectBuilderSpec {
         def iml = Mock(IdeaModuleIml)
         def module = TestUtil.newInstance(IdeaModule, moduleProject, iml)
         expect:
-        module.languageLevel == null
+        module.getLanguageLevel() == null
     }
 
     def "language level is null if matching calculated idea project language level"() {
@@ -50,7 +50,7 @@ class IdeaModuleTest extends AbstractProjectBuilderSpec {
         def iml = Mock(IdeaModuleIml)
         def module = TestUtil.newInstance(IdeaModule, moduleProject, iml)
         expect:
-        module.languageLevel == null
+        module.getLanguageLevel() == null
     }
 
     def "target bytecode version is null for non java projects"() {
@@ -60,7 +60,7 @@ class IdeaModuleTest extends AbstractProjectBuilderSpec {
         def iml = Mock(IdeaModuleIml)
         def module = TestUtil.newInstance(IdeaModule, moduleProject, iml)
         expect:
-        module.targetBytecodeVersion == null
+        module.getTargetBytecodeVersion() == null
     }
 
    def "target bytecode version is null if matching calculated idea project bytecode version"() {
@@ -74,6 +74,6 @@ class IdeaModuleTest extends AbstractProjectBuilderSpec {
        def iml = Mock(IdeaModuleIml)
        def module = TestUtil.newInstance(IdeaModule, moduleProject, iml)
        expect:
-       module.targetBytecodeVersion == null
+       module.getTargetBytecodeVersion() == null
    }
 }

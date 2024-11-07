@@ -43,7 +43,7 @@ class RepoScriptBlockUtil {
         } else {
             """
                     ${type} {
-                        name '${name}'
+                        name = '${name}'
                         url = uri('${url}')
                     }
                 """

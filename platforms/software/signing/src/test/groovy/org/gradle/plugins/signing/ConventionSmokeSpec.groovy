@@ -51,7 +51,7 @@ class ConventionSmokeSpec extends SigningProjectSpec {
 
     def "default signatory with no properties"() {
         expect:
-        signing.signatory == null
+        signing.getSignatory() == null
     }
 
     def "default type"() {
@@ -77,7 +77,7 @@ class ConventionSmokeSpec extends SigningProjectSpec {
     def "can supply a callable as the required value"() {
         given:
         def flag = false
-        signing.required { flag }
+        signing.setRequired({ flag })
 
         expect:
         !signing.required

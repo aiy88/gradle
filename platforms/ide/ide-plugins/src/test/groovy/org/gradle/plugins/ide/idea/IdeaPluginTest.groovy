@@ -57,7 +57,7 @@ class IdeaPluginTest extends AbstractProjectBuilderSpec {
 
         then:
         childProject.idea instanceof IdeaModel
-        childProject.idea.project == null
+        childProject.idea.getProject() == null
         childProject.idea.module.outputFile == childProject.file("child.iml")
     }
 

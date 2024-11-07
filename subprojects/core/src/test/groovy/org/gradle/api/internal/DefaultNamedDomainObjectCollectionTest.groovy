@@ -167,7 +167,7 @@ class DefaultNamedDomainObjectCollectionTest extends AbstractNamedDomainObjectCo
 
         then:
         provider.present
-        provider.orNull == bean
+        provider.getOrNull() == bean
 
         when:
         container.remove(provider)
@@ -177,7 +177,7 @@ class DefaultNamedDomainObjectCollectionTest extends AbstractNamedDomainObjectCo
 
         and:
         !provider.present
-        provider.orNull == null
+        provider.getOrNull() == null
 
         when:
         provider.get()
@@ -197,7 +197,7 @@ class DefaultNamedDomainObjectCollectionTest extends AbstractNamedDomainObjectCo
         def provider = container.named('bean', Bean)
         then:
         provider.present
-        provider.orNull == bean
+        provider.getOrNull() == bean
     }
 
     def "can configure object by name and type"() {
@@ -212,7 +212,7 @@ class DefaultNamedDomainObjectCollectionTest extends AbstractNamedDomainObjectCo
         }
         then:
         provider.present
-        provider.orNull == bean
+        provider.getOrNull() == bean
         provider.get().value == "changed"
     }
 
@@ -228,7 +228,7 @@ class DefaultNamedDomainObjectCollectionTest extends AbstractNamedDomainObjectCo
         }
         then:
         provider.present
-        provider.orNull == bean
+        provider.getOrNull() == bean
         provider.get().value == "changed"
     }
 

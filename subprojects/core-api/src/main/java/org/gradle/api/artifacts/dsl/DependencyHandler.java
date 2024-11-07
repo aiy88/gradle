@@ -42,7 +42,7 @@ import java.util.Map;
  *
  * <pre>
  * dependencies {
- *     <i>configurationName</i> <i>dependencyNotation</i>
+ *     <i>configurationName</i>(<i>dependencyNotation</i>)
  * }
  * </pre>
  *
@@ -55,17 +55,17 @@ import java.util.Map;
  * dependencies {
  *   //for dependencies found in artifact repositories you can use
  *   //the group:name:version notation
- *   implementation 'commons-lang:commons-lang:2.6'
- *   testImplementation 'org.mockito:mockito:1.9.0-rc1'
+ *   implementation('commons-lang:commons-lang:2.6')
+ *   testImplementation('org.mockito:mockito:1.9.0-rc1')
  *
  *   //map-style notation:
- *   implementation group: 'com.google.code.guice', name: 'guice', version: '1.0'
+ *   implementation(group: 'com.google.code.guice', name: 'guice', version: '1.0')
  *
  *   //declaring arbitrary files as dependencies
- *   implementation files('hibernate.jar', 'libs/spring.jar')
+ *   implementation(files('hibernate.jar', 'libs/spring.jar'))
  *
  *   //putting all jars from 'libs' onto compile classpath
- *   implementation fileTree('libs')
+ *   implementation(fileTree('libs'))
  * }
  * </pre>
  *
@@ -182,11 +182,11 @@ import java.util.Map;
  * dependencies {
  *   //for dependencies found in artifact repositories you can use
  *   //the string notation, e.g. group:name:version
- *   implementation 'commons-lang:commons-lang:2.6'
- *   testImplementation 'org.mockito:mockito:1.9.0-rc1'
+ *   implementation('commons-lang:commons-lang:2.6')
+ *   testImplementation('org.mockito:mockito:1.9.0-rc1')
  *
  *   //map notation:
- *   implementation group: 'com.google.code.guice', name: 'guice', version: '1.0'
+ *   implementation(group: 'com.google.code.guice', name: 'guice', version: '1.0')
  * }
  * </pre>
  *
@@ -217,10 +217,10 @@ import java.util.Map;
  *
  * dependencies {
  *   //declaring arbitrary files as dependencies
- *   implementation files('hibernate.jar', 'libs/spring.jar')
+ *   implementation(files('hibernate.jar', 'libs/spring.jar'))
  *
  *   //putting all jars from 'libs' onto compile classpath
- *   implementation fileTree('libs')
+ *   implementation(fileTree('libs'))
  * }
  * </pre>
  *
@@ -249,13 +249,13 @@ import java.util.Map;
  *
  * dependencies {
  *   //we will use the Groovy version that ships with Gradle:
- *   implementation localGroovy()
+ *   implementation(localGroovy())
  *
  *   //our plugin requires Gradle API interfaces and classes to compile:
- *   implementation gradleApi()
+ *   implementation(gradleApi())
  *
  *   //we will use the Gradle test-kit to test build logic:
- *   testImplementation gradleTestKit()
+ *   testImplementation(gradleTestKit())
  * }
  * </pre>
  *
@@ -267,7 +267,7 @@ import java.util.Map;
  * <p>To add a client module to a configuration you can use the notation:</p>
  *
  * <pre>
- * <i>configurationName</i> module(<i>moduleNotation</i>) {
+ * <i>configurationName</i>(module(<i>moduleNotation</i>)) {
  *     <i>module dependencies</i>
  * }
  * </pre>

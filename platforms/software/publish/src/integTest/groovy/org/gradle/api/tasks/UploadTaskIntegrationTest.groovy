@@ -34,13 +34,11 @@ class UploadTaskIntegrationTest extends AbstractIntegrationSpec {
                 def ud = uploadDescriptor
                 uploadDescriptor = true
 
-                def dd = descriptorDestination
                 descriptorDestination = file('descriptor.txt')
 
                 def rh = repositories
                 repositories {}
 
-                def c = configuration
                 configuration = configurations.getByName('compileClasspath')
 
                 def a = artifacts

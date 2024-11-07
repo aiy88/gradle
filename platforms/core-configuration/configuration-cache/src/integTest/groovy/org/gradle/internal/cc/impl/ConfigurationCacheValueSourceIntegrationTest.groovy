@@ -230,8 +230,8 @@ class ConfigurationCacheValueSourceIntegrationTest extends AbstractConfiguration
         outputContains("Configuration cache entry discarded with 1 problem.")
         failure.assertHasFailures(expectedFailuresCount)
         problems.assertFailureHasProblems(failure) {
-            totalProblemsCount == 1
-            problemsWithStackTraceCount == 1
+            getTotalProblemsCount() == 1
+            getProblemsWithStackTraceCount() == 1
             withProblem("Build file 'build.gradle': line 5: failed to compute value with custom source 'BrokenValueSource' (some name) with java.lang.RuntimeException: Broken!")
         }
 

@@ -74,9 +74,9 @@ class DefaultIvyArtifactRepositoryTest extends Specification {
 
     def "creates a resolver for HTTP patterns"() {
         repository.name = 'name'
-        repository.artifactPattern 'https://host/[organisation]/[artifact]-[revision].[ext]'
-        repository.artifactPattern 'https://other/[module]/[artifact]-[revision].[ext]'
-        repository.ivyPattern 'https://host/[module]/ivy-[revision].xml'
+        repository.artifactPattern('https://host/[organisation]/[artifact]-[revision].[ext]')
+        repository.artifactPattern('https://other/[module]/[artifact]-[revision].[ext]')
+        repository.ivyPattern('https://host/[module]/ivy-[revision].xml')
 
         given:
         fileResolver.resolveUri('https://host/') >> new URI('https://host/')
@@ -98,9 +98,9 @@ class DefaultIvyArtifactRepositoryTest extends Specification {
 
     def "creates a resolver for file patterns"() {
         repository.name = 'name'
-        repository.artifactPattern 'repo/[organisation]/[artifact]-[revision].[ext]'
-        repository.artifactPattern 'repo/[organisation]/[module]/[artifact]-[revision].[ext]'
-        repository.ivyPattern 'repo/[organisation]/[module]/ivy-[revision].xml'
+        repository.artifactPattern('repo/[organisation]/[artifact]-[revision].[ext]')
+        repository.artifactPattern('repo/[organisation]/[module]/[artifact]-[revision].[ext]')
+        repository.ivyPattern('repo/[organisation]/[module]/ivy-[revision].xml')
         def file = new File("test")
         def fileUri = file.toURI()
 
@@ -230,15 +230,15 @@ class DefaultIvyArtifactRepositoryTest extends Specification {
             name == 'name'
             artifactPatterns == ['https://host/[module]/[revision]/[artifact](.[ext])']
             ivyPatterns == ["https://host/[module]/[revision]/ivy.xml"]
-            m2compatible
+            m2compatible == true
         }
     }
 
     def "combines layout patterns with additionally specified patterns"() {
         repository.name = 'name'
         repository.getUrl().set(URI.create('https://host/'))
-        repository.artifactPattern 'https://host/[other]/artifact'
-        repository.ivyPattern 'https://host/[other]/ivy'
+        repository.artifactPattern('https://host/[other]/artifact')
+        repository.ivyPattern('https://host/[other]/ivy')
 
         given:
         fileResolver.resolveUri('https://host/') >> new URI('https://host/')
@@ -263,7 +263,7 @@ class DefaultIvyArtifactRepositoryTest extends Specification {
         repository.patternLayout {
             artifact '[layoutPattern]'
         }
-        repository.artifactPattern 'https://other/[additionalPattern]'
+        repository.artifactPattern('https://other/[additionalPattern]')
         standardMockHttpTransport()
 
         given:

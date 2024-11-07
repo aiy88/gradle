@@ -89,11 +89,11 @@ class TaskContainerIntegrationTest extends AbstractDomainObjectContainerIntegrat
         "matching { it.name == \"help\" }"  | "toList()"          | true                  | false
         "matching { it.name == \"help\" }"  | "iterator()"        | true                  | false
 
-        "matching { it.group == \"help\" }" | "all {}"            | true                  | true
-        "matching { it.group == \"help\" }" | "forEach {}"        | true                  | false
-        "matching { it.group == \"help\" }" | "configureEach {}"  | false                 | false
-        "matching { it.group == \"help\" }" | "toList()"          | true                  | false
-        "matching { it.group == \"help\" }" | "iterator()"        | true                  | false
+        "matching { it.getGroup() == \"help\" }" | "all {}"            | true                  | true
+        "matching { it.getGroup() == \"help\" }" | "forEach {}"        | true                  | false
+        "matching { it.getGroup() == \"help\" }" | "configureEach {}"  | false                 | false
+        "matching { it.getGroup() == \"help\" }" | "toList()"          | true                  | false
+        "matching { it.getGroup() == \"help\" }" | "iterator()"        | true                  | false
 
     }
 

@@ -35,8 +35,8 @@ class DefaultHttpBuildCacheServiceFactoryTest extends Specification {
         def credentials = extractCredentialsFromUserInfo(objectFactory, new URI("https://${userinfo}@myserver.local"))
 
         then:
-        credentials.username == username
-        credentials.password == password
+        credentials.getUsername() == username
+        credentials.getPassword() == password
 
         where:
         userinfo                             | username   | password
@@ -52,7 +52,7 @@ class DefaultHttpBuildCacheServiceFactoryTest extends Specification {
         def credentials = extractCredentialsFromUserInfo(objectFactory, new URI("https://us%3Aer:password@myserver.local"))
 
         then:
-        credentials.username == 'us'
-        credentials.password == 'er:password'
+        credentials.getUsername() == 'us'
+        credentials.getPassword() == 'er:password'
     }
 }

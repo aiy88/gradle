@@ -111,7 +111,7 @@ abstract class BaseBuildScanPluginCheckInFixture {
                 void apply($Settings.name settings) {
                     println "${propertyPrefix}.apply.runtimeVersion = $runtimeVersion"
 
-                    if (!$doCheckIn || settings.gradle.parent != null) {
+                    if (!$doCheckIn || settings.gradle.getParent() != null) {
                         return
                     }
 

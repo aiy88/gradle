@@ -107,7 +107,7 @@ class CheckstylePluginTest extends AbstractProjectBuilderSpec {
         publishDefaultCheckstyle()
 
         expect:
-        task.description == null
+        task.getDescription() == null
         task.source.isEmpty()
         task.checkstyleClasspath.files == project.configurations.checkstyle.files
         task.configFile == project.file("config/checkstyle/checkstyle.xml")
@@ -192,7 +192,7 @@ class CheckstylePluginTest extends AbstractProjectBuilderSpec {
         publishDefaultCheckstyle()
 
         expect:
-        task.description == null
+        task.getDescription() == null
         task.source.isEmpty()
         task.checkstyleClasspath.files == project.configurations.checkstyle.files
         task.configFile == project.file("checkstyle-config")

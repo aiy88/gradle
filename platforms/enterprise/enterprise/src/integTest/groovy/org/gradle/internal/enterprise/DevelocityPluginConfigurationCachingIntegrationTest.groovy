@@ -225,8 +225,8 @@ class DevelocityPluginConfigurationCachingIntegrationTest extends AbstractIntegr
         """
             def rootServiceRef() {
                 def rootGradle = gradle
-                while (rootGradle.parent != null) {
-                    rootGradle = gradle.parent
+                while (rootGradle.getParent() != null) {
+                    rootGradle = gradle.getParent()
                 }
                 rootGradle.extensions.serviceRef
             }

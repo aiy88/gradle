@@ -84,7 +84,7 @@ class PmdPluginTest extends AbstractProjectBuilderSpec {
         expect:
         PmdExtension extension = project.extensions.pmd
         extension.ruleSets.get() == ["category/java/errorprone.xml"]
-        extension.ruleSetConfig == null
+        extension.getRuleSetConfig() == null
         extension.ruleSetFiles.empty
         extension.reportsDir.asFile.get() == project.file("build/reports/pmd")
         !extension.ignoreFailures.get()
@@ -138,7 +138,7 @@ class PmdPluginTest extends AbstractProjectBuilderSpec {
             source as List == sourceSet.allJava as List
             assert pmdClasspath.files == project.configurations.pmd.files
             assert ruleSets.get() == ["category/java/errorprone.xml"]
-            assert ruleSetConfig == null
+            assert getRuleSetConfig() == null
             assert ruleSetFiles.empty
             assert reports.xml.outputLocation.asFile.get() == project.file("build/reports/pmd/${sourceSet.name}.xml")
             assert reports.html.outputLocation.asFile.get() == project.file("build/reports/pmd/${sourceSet.name}.html")
@@ -154,11 +154,11 @@ class PmdPluginTest extends AbstractProjectBuilderSpec {
         def task = project.tasks.create("pmdCustom", Pmd)
 
         expect:
-        task.description == null
+        task.getDescription() == null
         task.source.empty
         task.pmdClasspath.files == project.configurations.pmd.files
         task.ruleSets.get() == ["category/java/errorprone.xml"]
-        task.ruleSetConfig == null
+        task.getRuleSetConfig() == null
         task.ruleSetFiles.empty
         task.reports.xml.outputLocation.asFile.get() == project.file("build/reports/pmd/custom.xml")
         task.reports.html.outputLocation.asFile.get() == project.file("build/reports/pmd/custom.html")
@@ -217,7 +217,7 @@ class PmdPluginTest extends AbstractProjectBuilderSpec {
             source as List == sourceSet.allJava as List
             assert pmdClasspath.files == project.configurations.pmd.files
             assert ruleSets.get() == ["java-braces", "java-unusedcode"]
-            assert ruleSetConfig.asString() == "ruleset contents"
+            assert getRuleSetConfig().asString() == "ruleset contents"
             assert ruleSetFiles.singleFile == project.file("my-ruleset.xml")
             assert reports.xml.outputLocation.asFile.get() == project.file("pmd-reports/${sourceSet.name}.xml")
             assert reports.html.outputLocation.asFile.get() == project.file("pmd-reports/${sourceSet.name}.html")
@@ -242,11 +242,11 @@ class PmdPluginTest extends AbstractProjectBuilderSpec {
         }
 
         expect:
-        task.description == null
+        task.getDescription() == null
         task.source.empty
         task.pmdClasspath.files == project.configurations.pmd.files
         task.ruleSets.get() == ["java-braces", "java-unusedcode"]
-        task.ruleSetConfig.asString() == "ruleset contents"
+        task.getRuleSetConfig().asString() == "ruleset contents"
         task.ruleSetFiles.singleFile == project.file("my-ruleset.xml")
         task.reports.xml.outputLocation.asFile.get() == project.file("pmd-reports/custom.xml")
         task.reports.html.outputLocation.asFile.get() == project.file("pmd-reports/custom.html")

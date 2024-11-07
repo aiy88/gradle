@@ -20,10 +20,10 @@ import groovy.lang.GroovyRuntimeException;
 import groovy.lang.MissingMethodException;
 import groovy.lang.MissingPropertyException;
 import groovy.lang.Script;
+import org.gradle.api.internal.DynamicObjectAware;
 import org.gradle.api.plugins.Convention;
 import org.gradle.internal.metaobject.BeanDynamicObject;
 import org.gradle.internal.metaobject.DynamicObject;
-import org.gradle.api.internal.DynamicObjectAware;
 import org.gradle.internal.metaobject.DynamicObjectUtil;
 import org.gradle.util.TestUtil;
 import org.junit.Test;
@@ -34,8 +34,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.junit.Assert.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -135,18 +135,6 @@ public class ExtensibleDynamicObjectTest {
 
         assertThat(((Bean) bean).getProperty("groovyProperty"), equalTo((Object) "new value"));
         assertThat(bean.getGroovyProperty(), equalTo((Object) "new value"));
-    }
-
-    @Test
-    public void canGetAndSetGroovyDynamicProperty() {
-        GroovyBean bean = new GroovyBean();
-        ExtensibleDynamicObjectTestHelper.decorateGroovyBean(bean);
-
-        assertThat(((Bean) bean).getProperty("dynamicGroovyProperty"), equalTo(null));
-
-        bean.setProperty("dynamicGroovyProperty", "new value");
-
-        assertThat(((Bean) bean).getProperty("dynamicGroovyProperty"), equalTo((Object) "new value"));
     }
 
     @Test
@@ -534,17 +522,6 @@ public class ExtensibleDynamicObjectTest {
         Bean bean = new Bean();
         bean.defineProperty("someMethod", TestUtil.toClosure("{ param -> param.toLowerCase() }"));
         assertThat(bean.invokeMethod("someMethod", "Param"), equalTo((Object) "param"));
-    }
-
-    @Test
-    public void canInvokeClosureLikePropertyAsAMethod() {
-        Bean bean = new Bean();
-        bean.defineProperty("someMethod", new Object() {
-            public String call(String param) {
-                return param.toLowerCase();
-            }
-        });
-        assertThat(bean.invokeMethod("someMethod", "Param"), equalTo("param"));
     }
 
     @Test

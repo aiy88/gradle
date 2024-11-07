@@ -35,7 +35,10 @@ import java.util.function.BiFunction
 
 import static AsmBackedClassGeneratorTest.Bean
 import static AsmBackedClassGeneratorTest.InterfaceBean
-import static org.gradle.internal.instantiation.generator.AsmBackedClassGeneratorTest.*
+import static org.gradle.internal.instantiation.generator.AsmBackedClassGeneratorTest.FinalReadOnlyNonManagedPropertyBean
+import static org.gradle.internal.instantiation.generator.AsmBackedClassGeneratorTest.InterfacePropertyBean
+import static org.gradle.internal.instantiation.generator.AsmBackedClassGeneratorTest.NestedBeanClass
+import static org.gradle.internal.instantiation.generator.AsmBackedClassGeneratorTest.UsesToStringInConstructor
 
 class AsmBackedClassGeneratorDecoratedTest extends AbstractClassGeneratorSpec {
     ClassGenerator generator = AsmBackedClassGenerator.decorateAndInject([], Stub(PropertyRoleAnnotationHandler), [], new TestCrossBuildInMemoryCacheFactory(), 0)
@@ -52,7 +55,7 @@ class AsmBackedClassGeneratorDecoratedTest extends AbstractClassGeneratorSpec {
 
         beanWithNoName.toString().startsWith("${Bean.name}_Decorated@")
         !beanWithNoName.hasUsefulDisplayName()
-        beanWithNoName.modelIdentityDisplayName == null
+        beanWithNoName.getModelIdentityDisplayName() == null
     }
 
     def "does not mixes in toString() implementation for class that defines an implementation"() {
@@ -67,7 +70,7 @@ class AsmBackedClassGeneratorDecoratedTest extends AbstractClassGeneratorSpec {
 
         beanWithNoName.toString() == "<bean>"
         beanWithNoName.hasUsefulDisplayName()
-        beanWithNoName.modelIdentityDisplayName == null
+        beanWithNoName.getModelIdentityDisplayName() == null
     }
 
     def "mixes in toString() implementation for interface"() {
@@ -82,7 +85,7 @@ class AsmBackedClassGeneratorDecoratedTest extends AbstractClassGeneratorSpec {
 
         beanWithNoName.toString().startsWith("${InterfaceBean.name}_Decorated@")
         !beanWithNoName.hasUsefulDisplayName()
-        beanWithNoName.modelIdentityDisplayName == null
+        beanWithNoName.getModelIdentityDisplayName() == null
     }
 
     def "constructor can use toString() implementation"() {
@@ -300,13 +303,7 @@ class AsmBackedClassGeneratorDecoratedTest extends AbstractClassGeneratorSpec {
         i.enumProperty == TestEnum.DEF
 
         when:
-        i.enumProperty "abc"
-
-        then:
-        i.enumProperty == TestEnum.ABC
-
-        when:
-        i.enumProperty "foo"
+        i.enumProperty = "foo"
 
         then:
         thrown IllegalArgumentException
@@ -382,7 +379,7 @@ class AsmBackedClassGeneratorDecoratedTest extends AbstractClassGeneratorSpec {
         def i = create(NonExtensibleObject)
 
         when:
-        i.testEnum "ABC"
+        i.testEnum = "ABC"
 
         then:
         i.testEnum == TestEnum.ABC

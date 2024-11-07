@@ -115,7 +115,7 @@ class WorkerExecutorFixture {
                 @TaskAction
                 void executeTask() {
                     workerExecutor."\${isolationMode}"({ spec ->
-                        displayName = this.displayName
+                        displayName = this.getDisplayName()
                         if (spec instanceof ClassLoaderWorkerSpec) {
                             classpath.from(additionalClasspath)
                         }
@@ -123,7 +123,7 @@ class WorkerExecutorFixture {
                             forkOptions.maxHeapSize = "64m"
                             forkOptions(additionalForkOptions)
                         }
-                        if (this.forkMode != null) {
+                        if (this.getForkMode() != null) {
                             forkMode = this.forkMode
                         }
                     }).submit(workActionClass) { parameters ->

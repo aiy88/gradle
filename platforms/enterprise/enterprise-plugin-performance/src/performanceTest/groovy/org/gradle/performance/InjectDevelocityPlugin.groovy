@@ -51,7 +51,7 @@ class InjectDevelocityPlugin implements BuildMutator {
                 buildscript {
                     repositories {
                         maven {
-                            name 'gradleInternalRepository'
+                            name = 'gradleInternalRepository'
                             url = '${System.getenv("GRADLE_INTERNAL_REPO_URL")}/enterprise-libs-snapshots-local/'
                             credentials {
                                 username = System.getenv("GRADLE_INTERNAL_REPO_USERNAME")

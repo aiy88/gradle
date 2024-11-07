@@ -160,7 +160,7 @@ class FilteringProviderTest extends Specification {
 
                 @Override
                 boolean isSatisfiedBy(String element) {
-                    return provider.orNull != null
+                    return provider.getOrNull() != null
                 }
 
                 @Override

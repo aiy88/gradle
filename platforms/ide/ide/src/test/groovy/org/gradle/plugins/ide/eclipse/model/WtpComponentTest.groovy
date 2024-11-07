@@ -68,7 +68,7 @@ public class WtpComponentTest extends Specification {
         component.xml != null
         component.wbModuleEntries == []
         component.deployName == null
-        component.contextPath == null
+        component.getContextPath() == null
     }
 
     def "roundtripping the component file leaves it unchanged"() {

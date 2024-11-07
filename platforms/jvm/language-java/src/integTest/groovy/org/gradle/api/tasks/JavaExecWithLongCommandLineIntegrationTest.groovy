@@ -49,8 +49,8 @@ class JavaExecWithLongCommandLineIntegrationTest extends AbstractIntegrationSpec
                 dependsOn sourceSets.main.runtimeClasspath
                 doLast {
                     project.javaexec {
-                        if (run.executable) {
-                            executable run.executable
+                        if (run.getExecutable()) {
+                            executable = run.getExecutable()
                         }
                         classpath = run.classpath
                         mainClass = run.mainClass
@@ -61,7 +61,7 @@ class JavaExecWithLongCommandLineIntegrationTest extends AbstractIntegrationSpec
 
             tasks.register("runWithExecOperations") {
                 dependsOn sourceSets.main.runtimeClasspath
-                def runExecutable = run.executable ? run.executable : null
+                def runExecutable = run.getExecutable() ? run.getExecutable() : null
                 def runClasspath = run.classpath
                 def runMain = run.mainClass
                 def runArgs = run.args
@@ -112,7 +112,7 @@ class JavaExecWithLongCommandLineIntegrationTest extends AbstractIntegrationSpec
     def "does not suggest long command line failures when execution fails with #method"() {
         buildFile << """
             extraClasspath.from('${veryLongFileNames.join("','")}')
-            run.executable 'does-not-exist'
+            run.executable = 'does-not-exist'
         """
 
         when:
@@ -140,7 +140,7 @@ class JavaExecWithLongCommandLineIntegrationTest extends AbstractIntegrationSpec
     @UnsupportedWithConfigurationCache(iterationMatchers = ".* project.javaexec")
     def "does not suggest long command line failures when execution fails for short command line with #method"() {
         buildFile << """
-            run.executable 'does-not-exist'
+            run.executable = 'does-not-exist'
         """
 
         when:

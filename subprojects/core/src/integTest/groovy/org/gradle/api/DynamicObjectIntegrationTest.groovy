@@ -368,8 +368,8 @@ assert 'overridden value' == global
             task test(type: GroovyTask)
             assert test.prop == '[default]'
             test {
-                description 'does something'
-                prop 'value'
+                description = 'does something'
+                prop = 'value'
             }
             assert test.description == 'does something'
             assert test.prop == 'value'

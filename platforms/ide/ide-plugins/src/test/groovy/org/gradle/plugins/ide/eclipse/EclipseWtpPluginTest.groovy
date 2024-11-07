@@ -355,7 +355,7 @@ class EclipseWtpPluginTest extends AbstractProjectBuilderSpec {
         assert wtp.libConfigurations == [project.configurations.earlib] as Set
         assert wtp.minusConfigurations == [] as Set
         assert wtp.deployName == project.name
-        assert wtp.contextPath == null
+        assert wtp.getContextPath() == null
         assert wtp.resources == []
         assert wtp.classesDeployPath == "/"
         assert wtp.libDeployPath == "/lib"
@@ -379,7 +379,7 @@ class EclipseWtpPluginTest extends AbstractProjectBuilderSpec {
         assert wtp.libConfigurations == [project.configurations.runtimeClasspath] as Set
         assert wtp.minusConfigurations == [] as Set
         assert wtp.deployName == project.name
-        assert wtp.contextPath == null
+        assert wtp.getContextPath() == null
         assert wtp.resources == []
         assert wtp.classesDeployPath == "/"
         assert wtp.libDeployPath == "../"

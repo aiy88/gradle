@@ -27,7 +27,7 @@ class ForkOptionsTest extends Specification {
     def 'initial values of forkOptions'() {
         expect:
         forkOptions.executable.getOrNull() == null
-        forkOptions.javaHome == null
+        forkOptions.getJavaHome() == null
         forkOptions.memoryInitialSize.getOrNull() == null
         forkOptions.memoryMaximumSize.getOrNull() == null
         forkOptions.tempDir.getOrNull() == null

@@ -86,7 +86,7 @@ class BuildCacheKeyFixture extends UserInitScriptExecuterFixture {
                 }
             }
 
-            if (gradle.parent == null) {
+            if (gradle.getParent() == null) {
                 def collector = gradle.sharedServices.registerIfAbsent("buildCacheKeyCollector", BuildCacheKeyCollector) {
                     parameters.buildCacheKeyJson.fileValue(new File("${TextUtil.normaliseFileSeparators(file.absolutePath)}"))
                 }

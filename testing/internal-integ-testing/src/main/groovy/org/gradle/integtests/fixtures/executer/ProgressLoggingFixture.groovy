@@ -128,7 +128,7 @@ class ProgressLoggingFixture extends InitScriptExecuterFixture {
 
             File outputFile = file("${fixtureData.toURI()}")
 
-            if (gradle.parent == null) {
+            if (gradle.getParent() == null) {
                 // Only register the service for the root build
                 def services = gradle.services
                 def outputProgress = gradle.sharedServices.registerIfAbsent("outputProgress", OutputProgressService) {

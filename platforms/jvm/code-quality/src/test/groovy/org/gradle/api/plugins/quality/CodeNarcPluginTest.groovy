@@ -71,7 +71,7 @@ class CodeNarcPluginTest extends AbstractProjectBuilderSpec {
         repo.module("org.codenarc", "CodeNarc", CodeNarcPlugin.STABLE_VERSION_WITH_GROOVY4_SUPPORT).publish()
 
         expect:
-        task.description == null
+        task.getDescription() == null
         task.source.isEmpty()
         task.codenarcClasspath.files == project.configurations.codenarc.files
         task.config.inputFiles.singleFile == project.file("config/codenarc/codenarc.xml")
@@ -106,7 +106,7 @@ class CodeNarcPluginTest extends AbstractProjectBuilderSpec {
         }
 
         expect:
-        task.description == null
+        task.getDescription() == null
         task.source.isEmpty()
         task.codenarcClasspath.files == project.configurations.codenarc.files
         task.config.inputFiles.singleFile == project.file("codenarc-config")

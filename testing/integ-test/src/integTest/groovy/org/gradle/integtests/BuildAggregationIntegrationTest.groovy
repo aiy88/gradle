@@ -25,7 +25,7 @@ class BuildAggregationIntegrationTest extends AbstractIntegrationSpec {
     def canExecuteAnotherBuildFromBuild() {
         when:
         buildFile << '''
-            assert gradle.parent == null
+            assert gradle.getParent() == null
             task build(type: GradleBuild) {
                 dir = 'other'
                 tasks = ['dostuff']
@@ -35,10 +35,10 @@ class BuildAggregationIntegrationTest extends AbstractIntegrationSpec {
         and:
         file('other/settings.gradle') << "rootProject.name = 'other'"
         file('other/build.gradle') << '''
-            assert gradle.parent != null
+            assert gradle.getParent() != null
             task dostuff {
                 doLast {
-                    assert gradle.parent != null
+                    assert gradle.getParent() != null
                 }
             }
 '''
@@ -50,16 +50,16 @@ class BuildAggregationIntegrationTest extends AbstractIntegrationSpec {
     def treatsBuildSrcProjectAsANestedBuild() {
         when:
         buildFile << '''
-            assert gradle.parent == null
+            assert gradle.getParent() == null
             task build
 '''
 
         file('buildSrc/build.gradle') << '''
             apply plugin: 'java'
-            assert gradle.parent != null
+            assert gradle.getParent() != null
             classes {
                 doLast {
-                    assert gradle.parent != null
+                    assert gradle.getParent() != null
                 }
             }
 '''

@@ -1,4 +1,4 @@
-if (gradle.parent == null) {
+if (gradle.getParent() == null) {
     useLogger(new CustomLogger())
 }
 

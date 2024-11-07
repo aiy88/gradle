@@ -29,7 +29,7 @@ class CheckstyleTest extends Specification {
         with(checkstyle) {
             checkstyleClasspath.empty
             classpath.empty
-            configFile == null
+            getConfigFile() == null
             config == null
             configProperties.get() == [:]
             !reports.xml.required.get()

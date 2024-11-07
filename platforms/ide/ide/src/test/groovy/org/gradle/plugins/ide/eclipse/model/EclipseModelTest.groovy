@@ -59,7 +59,7 @@ class EclipseModelTest extends Specification {
         given:
         model.wtp = TestUtil.newInstance(EclipseWtp)
         //for example when wtp+java applied but project is not a dependency to any war/ear.
-        assert model.wtp.component == null
+        assert model.wtp.getComponent() == null
 
         when:
         model.pathVariables(one: new File('.'))

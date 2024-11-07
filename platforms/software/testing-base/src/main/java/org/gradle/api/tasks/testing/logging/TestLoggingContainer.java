@@ -33,12 +33,12 @@ import org.gradle.internal.instrumentation.api.annotations.NotToBeReplacedByLazy
  *     testLogging {
  *         // set options for log level LIFECYCLE
  *         events "failed"
- *         exceptionFormat org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+ *         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
  *
  *         // set options for log level DEBUG
  *         debug {
  *             events "started", "skipped", "failed"
- *             exceptionFormat org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+ *             exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
  *         }
  *
  *         // remove standard output/error logging from --info builds

@@ -59,7 +59,7 @@ class AsmBackedClassGeneratorInjectUndecoratedTest extends AbstractClassGenerato
         bean.publicType() == AbstractBean
 
         bean instanceof ModelObject
-        bean.modelIdentityDisplayName == null
+        bean.getModelIdentityDisplayName() == null
         !bean.hasUsefulDisplayName()
 
         bean instanceof OwnerAware
@@ -85,7 +85,7 @@ class AsmBackedClassGeneratorInjectUndecoratedTest extends AbstractClassGenerato
         bean.publicType() == BeanWithServiceGetters
 
         bean instanceof ModelObject
-        bean.modelIdentityDisplayName == null
+        bean.getModelIdentityDisplayName() == null
         !bean.hasUsefulDisplayName()
 
         bean instanceof OwnerAware
