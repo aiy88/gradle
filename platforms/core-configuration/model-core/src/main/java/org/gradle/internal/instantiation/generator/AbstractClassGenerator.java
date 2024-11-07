@@ -83,7 +83,6 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -199,7 +198,7 @@ abstract class AbstractClassGenerator implements ClassGenerator {
         ManagedPropertiesHandler managedPropertiesHandler = new ManagedPropertiesHandler();
         NamePropertyHandler namePropertyHandler = new NamePropertyHandler();
         ExtensibleTypePropertyHandler extensibleTypeHandler = new ExtensibleTypePropertyHandler();
-        DslMixInPropertyType dslMixInHandler = new DslMixInPropertyType(extensibleTypeHandler);
+        DslMixInPropertyType dslMixInHandler = new DslMixInPropertyType();
 
         // Order is significant. Injection handler should be at the end
         List<ClassGenerationHandler> handlers = new ArrayList<>(5 + enabledAnnotations.size() + disabledAnnotations.size());
@@ -828,7 +827,6 @@ abstract class AbstractClassGenerator implements ClassGenerator {
     }
 
     private static class DslMixInPropertyType extends ClassGenerationHandler {
-        private final AbstractClassGenerator.ExtensibleTypePropertyHandler extensibleTypeHandler;
         private boolean providesOwnDynamicObject;
         private boolean needDynamicAware;
         private boolean needGroovyObject;
@@ -836,10 +834,6 @@ abstract class AbstractClassGenerator implements ClassGenerator {
         private final List<PropertyMetadata> mutableProperties = new ArrayList<>();
         private final MethodSet actionMethods = new MethodSet();
         private final SetMultimap<String, Method> closureMethods = LinkedHashMultimap.create();
-
-        public DslMixInPropertyType(ExtensibleTypePropertyHandler extensibleTypeHandler) {
-            this.extensibleTypeHandler = extensibleTypeHandler;
-        }
 
         @Override
         void startType(Class<?> type) {
@@ -905,24 +899,6 @@ abstract class AbstractClassGenerator implements ClassGenerator {
             }
             visitor.addDynamicMethods();
             addMissingClosureOverloads(visitor);
-            addSetMethods(visitor);
-        }
-
-        private void addSetMethods(AbstractClassGenerator.ClassGenerationVisitor visitor) {
-            for (PropertyMetadata property : mutableProperties) {
-                if (property.setMethods.isEmpty()) {
-                    Set<Class<?>> appliedTo = new HashSet<>();
-                    for (Method setter : property.setters) {
-                        if (appliedTo.add(setter.getParameterTypes()[0])) {
-                            visitor.addSetMethod(property, setter);
-                        }
-                    }
-                } else if (extensibleTypeHandler.conventionProperties.contains(property)) {
-                    for (Method setMethod : property.setMethods) {
-                        visitor.applyConventionMappingToSetMethod(property, setMethod);
-                    }
-                }
-            }
         }
 
         private void addMissingClosureOverloads(ClassGenerationVisitor visitor) {

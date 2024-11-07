@@ -539,7 +539,7 @@ public class BeanDynamicObject extends AbstractDynamicObject {
         }
 
         public DynamicInvokeResult invokeMethod(String name, Object... arguments) {
-            maybeAddCallInterceptionHooksToMetaclass(name);
+            //maybeAddCallInterceptionHooksToMetaclass(name);
 
             MetaClass metaClass = getMetaClass();
             MetaMethod metaMethod = lookupMethod(metaClass, name, inferTypes(arguments));
