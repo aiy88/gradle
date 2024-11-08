@@ -32,7 +32,6 @@ import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.internal.deprecation.DeprecationLogger;
 import org.gradle.internal.instrumentation.api.annotations.ReplacesEagerProperty;
-import org.gradle.internal.instrumentation.api.annotations.ToBeReplacedByLazyProperty;
 import org.gradle.internal.nativeintegration.filesystem.FileSystem;
 import org.gradle.internal.reflect.Instantiator;
 import org.gradle.util.internal.GUtil;
@@ -57,7 +56,6 @@ public abstract class AbstractArchiveTask extends AbstractCopyTask {
     private final Property<String> archiveVersion;
     private final Property<String> archiveExtension;
     private final Property<String> archiveClassifier;
-    private final Property<Boolean> archiveReproducibleFileOrder;
 
     public AbstractArchiveTask() {
         ObjectFactory objectFactory = getProject().getObjects();
@@ -86,7 +84,7 @@ public abstract class AbstractArchiveTask extends AbstractCopyTask {
         archiveFile.convention(archiveDestinationDirectory.file(archiveName));
 
         getPreserveFileTimestamps().convention(false);
-        archiveReproducibleFileOrder = objectFactory.property(Boolean.class).convention(false);
+        getReproducibleFileOrder().convention(false);
     }
 
     private static String maybe(@Nullable String prefix, @Nullable String value) {
@@ -286,31 +284,14 @@ public abstract class AbstractArchiveTask extends AbstractCopyTask {
      * @since 3.4
      */
     @Input
-    @ToBeReplacedByLazyProperty
-    public boolean isReproducibleFileOrder() {
-        return archiveReproducibleFileOrder.get();
-    }
-
-    /**
-     * Specifies whether to enforce a reproducible file order when reading files from directories.
-     * <p>
-     * Gradle will then walk the directories on disk which are part of this archive in a reproducible order
-     * independent of file systems and operating systems.
-     * This helps Gradle reliably produce byte-for-byte reproducible archives.
-     * </p>
-     *
-     * @param reproducibleFileOrder <code>true</code> if the files should read from disk in a reproducible order.
-     * @since 3.4
-     */
-    public void setReproducibleFileOrder(boolean reproducibleFileOrder) {
-        archiveReproducibleFileOrder.set(reproducibleFileOrder);
-    }
+    @ReplacesEagerProperty(originalType = boolean.class)
+    public abstract Property<Boolean> getReproducibleFileOrder();
 
     @Override
     protected CopyActionExecuter createCopyActionExecuter() {
         Instantiator instantiator = getInstantiator();
         FileSystem fileSystem = getFileSystem();
 
-        return new CopyActionExecuter(instantiator, getObjectFactory(), fileSystem, isReproducibleFileOrder(), getDocumentationRegistry());
+        return new CopyActionExecuter(instantiator, getObjectFactory(), fileSystem, getReproducibleFileOrder().get(), getDocumentationRegistry());
     }
 }
