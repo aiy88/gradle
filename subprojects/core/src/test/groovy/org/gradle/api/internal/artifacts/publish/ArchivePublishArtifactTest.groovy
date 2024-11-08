@@ -69,7 +69,7 @@ class ArchivePublishArtifactTest extends Specification {
         new ArchivePublishArtifact(taskDependencyFactory, withAppendixOnly).name == "javadoc"
     }
 
-    public static abstract class DummyJar extends AbstractArchiveTask {
+    static abstract class DummyJar extends AbstractArchiveTask {
         DummyJar() {
             archiveExtension.set("jar")
         }

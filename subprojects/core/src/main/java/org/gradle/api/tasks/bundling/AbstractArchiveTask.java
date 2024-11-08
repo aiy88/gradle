@@ -83,7 +83,7 @@ public abstract class AbstractArchiveTask extends AbstractCopyTask {
         archiveFile = objectFactory.fileProperty();
         archiveFile.convention(archiveDestinationDirectory.file(archiveName));
 
-        getPreserveFileTimestamps().convention(false);
+        getPreserveFileTimestamps().convention(true);
         getReproducibleFileOrder().convention(false);
     }
 
