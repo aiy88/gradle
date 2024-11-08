@@ -115,7 +115,7 @@ class ZipIntegrationTest extends AbstractIntegrationSpec {
         fails 'zip'
 
         then:
-        failure.assertHasDescription("A problem occurred evaluating root project 'root'.")
+        failure.assertHasDescription(" Execution failed for task ':zip'.")
         failure.assertHasCause(cause)
 
         where:
