@@ -16,7 +16,10 @@
 
 package org.gradle.caching.configuration;
 
-import org.gradle.internal.instrumentation.api.annotations.ToBeReplacedByLazyProperty;
+import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.provider.Property;
+
+import javax.inject.Inject;
 
 /**
  * Base implementation for build cache service configuration.
@@ -24,40 +27,21 @@ import org.gradle.internal.instrumentation.api.annotations.ToBeReplacedByLazyPro
  * @since 3.5
  */
 public abstract class AbstractBuildCache implements BuildCache {
-    private boolean enabled = true;
-    private boolean push;
+    private Property<Boolean> enabled = getObjectFactory().property(Boolean.class).convention(false);
+    private Property<Boolean> push = getObjectFactory().property(Boolean.class).convention(false);
 
-    /**
-     * {@inheritDoc}
-     */
+    @Inject
+    protected ObjectFactory getObjectFactory() {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
-    @ToBeReplacedByLazyProperty
-    public boolean isEnabled() {
+    public Property<Boolean> getEnabled() {
         return enabled;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @ToBeReplacedByLazyProperty
-    public boolean isPush() {
+    public Property<Boolean> getPush() {
         return push;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setPush(boolean push) {
-        this.push = push;
     }
 }
