@@ -23,8 +23,6 @@ import org.gradle.api.tasks.testing.JUnitXmlReport;
 
 public abstract class DefaultJUnitXmlReport extends SingleDirectoryReport implements JUnitXmlReport {
 
-    private boolean outputPerTestCase;
-
     public DefaultJUnitXmlReport(String name, Describable owner) {
         super(name, owner, null);
         this.getMergeReruns().convention(false);
@@ -33,14 +31,7 @@ public abstract class DefaultJUnitXmlReport extends SingleDirectoryReport implem
     }
 
     @Override
-    public boolean isOutputPerTestCase() {
-        return outputPerTestCase;
-    }
-
-    @Override
-    public void setOutputPerTestCase(boolean outputPerTestCase) {
-        this.outputPerTestCase = outputPerTestCase;
-    }
+    public abstract Property<Boolean> getOutputPerTestCase();
 
     @Override
     public abstract Property<Boolean> getMergeReruns();
