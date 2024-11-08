@@ -18,10 +18,9 @@ package org.gradle.testing.jacoco.plugins;
 
 import com.google.common.base.Joiner;
 import org.apache.commons.lang.StringUtils;
+import org.apache.groovy.lang.annotation.Incubating;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.file.RegularFileProperty;
-import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
@@ -34,7 +33,6 @@ import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.internal.instrumentation.api.annotations.NotToBeReplacedByLazyProperty;
 import org.gradle.internal.instrumentation.api.annotations.ReplacesEagerProperty;
-import org.gradle.internal.instrumentation.api.annotations.ToBeReplacedByLazyProperty;
 import org.gradle.internal.jacoco.JacocoAgentJar;
 import org.gradle.process.JavaForkOptions;
 import org.gradle.util.internal.RelativePathUtil;
@@ -71,8 +69,6 @@ public abstract class JacocoTaskExtension {
     private final JavaForkOptions task;
     private final ProviderFactory providers;
 
-    private final RegularFileProperty destinationFile;
-
     /**
      * Creates a Jacoco task extension.
      *
@@ -80,12 +76,11 @@ public abstract class JacocoTaskExtension {
      * @param task the task we extend
      */
     @Inject
-    public JacocoTaskExtension(ObjectFactory objects, ProviderFactory providers, JacocoAgentJar agent, JavaForkOptions task) {
+    public JacocoTaskExtension(ProviderFactory providers, JacocoAgentJar agent, JavaForkOptions task) {
         this.agent = agent;
         this.task = task;
         this.providers = providers;
         getEnabled().convention(true);
-        this.destinationFile = objects.fileProperty();
         getIncludeNoLocationClasses().convention(false);
         getDumpOnExit().convention(true);
         getOutput().convention(Output.FILE);
@@ -109,29 +104,35 @@ public abstract class JacocoTaskExtension {
     }
 
     /**
-     * The path for the execution data to be written to.
+     * The path to the directory for execution data to be written to.
+     *
+     * @return destination directory for execution data output
+     * @since 4.0
      */
     @Nullable
     @Optional
-    @OutputFile
-    @ToBeReplacedByLazyProperty(issue = "https://github.com/gradle/gradle/issues/29826")
-    public File getDestinationFile() {
-        return destinationFile.getAsFile().getOrNull();
-    }
+    @Internal
+    @ReplacesEagerProperty(originalType = File.class)
+    public abstract DirectoryProperty getDestinationFile();
 
     /**
-     * Set the provider for calculating the destination file.
+     * Returns the path for the execution data to be written to, if present in {@link #getDestinationFile()},
+     * as a {@link File}.
      *
-     * @param destinationFile Destination file provider
-     * @since 4.0
+     * Deprecated, prefer using {@link #getDestinationFile()} directly.
+     *
+     * @return destination directory for execution data output
+     *
+     * @since 8.12
      */
-    public void setDestinationFile(Provider<File> destinationFile) {
-        this.destinationFile.fileProvider(destinationFile);
+    @Nullable
+    @OutputFile
+    @Deprecated
+    @Incubating
+    protected File getDestinationFileOutput() {
+        return getDestinationFile().isPresent() ? getDestinationFile().get().getAsFile() : null;
     }
 
-    public void setDestinationFile(File destinationFile) {
-        this.destinationFile.set(destinationFile);
-    }
     /**
      * List of class names that should be included in analysis. Names can use wildcards (* and ?). If left empty, all classes will be included. Defaults to an empty list.
      */

@@ -24,7 +24,6 @@ import org.gradle.api.Task;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileSystemOperations;
 import org.gradle.api.file.ProjectLayout;
-import org.gradle.api.file.RegularFile;
 import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -110,19 +109,20 @@ public abstract class JacocoPluginExtension {
      * @param task the task to apply Jacoco to.
      * @see JacocoPluginExtension#TASK_EXTENSION_NAME
      */
+    @SuppressWarnings("deprecation")
     public <T extends Task & JavaForkOptions> void applyTo(final T task) {
         final String taskName = task.getName();
         LOGGER.debug("Applying Jacoco to " + taskName);
-        JacocoTaskExtension extension = objects.newInstance(JacocoTaskExtension.class, objects, providers, agent, task);
-        extension.setDestinationFile(layout.getBuildDirectory().file("jacoco/" + taskName + ".exec").map(RegularFile::getAsFile));
+        JacocoTaskExtension extension = objects.newInstance(JacocoTaskExtension.class, providers, agent, task);
+        extension.getDestinationFile().set(layout.getBuildDirectory().dir("jacoco/" + taskName + ".exec"));
         task.getExtensions().add(TASK_EXTENSION_NAME, extension);
 
         task.getJvmArgumentProviders().add(new JacocoAgent(extension));
         task.doFirst(new JacocoOutputCleanupTestTaskAction(
             fs,
             extension.getOutput().zip(extension.getEnabled(), (output, enabled) -> enabled && output == JacocoTaskExtension.Output.FILE),
-            providers.provider(extension::getDestinationFile)
-        ));
+            providers.provider(extension::getDestinationFileOutput))
+        );
 
         // Do not cache the task if we are not writing execution data to a file
         Provider<Boolean> doNotCachePredicate = extension.getOutput().zip(extension.getEnabled(), (output, enabled) -> enabled && output != JacocoTaskExtension.Output.FILE);

@@ -15,6 +15,22 @@
             "changes": [
                 "Method has been removed"
             ]
+        },
+        {
+            "type": "org.gradle.testing.jacoco.plugins.JacocoTaskExtension",
+            "member": "Method org.gradle.testing.jacoco.plugins.JacocoTaskExtension.getDestinationFileOutput()",
+            "acceptation": "Added to preserve task dependency information",
+            "changes": [
+                "Deprecated annotation was added"
+            ]
+        },
+        {
+            "type": "org.gradle.testing.jacoco.plugins.JacocoTaskExtension",
+            "member": "Method org.gradle.testing.jacoco.plugins.JacocoTaskExtension.setDestinationFile(org.gradle.api.provider.Provider)",
+            "acceptation": "Unnecessary with getDestinationFile Provider",
+            "changes": [
+                "Method has been removed"
+            ]
         }
     ]
 }
