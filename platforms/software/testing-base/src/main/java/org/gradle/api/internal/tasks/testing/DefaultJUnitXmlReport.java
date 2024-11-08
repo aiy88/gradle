@@ -28,6 +28,7 @@ public abstract class DefaultJUnitXmlReport extends SingleDirectoryReport implem
         this.getMergeReruns().convention(false);
         this.getIncludeSystemOutLog().convention(true);
         this.getIncludeSystemErrLog().convention(true);
+        this.getOutputPerTestCase().convention(false);
     }
 
     @Override
