@@ -66,7 +66,7 @@ class TestNGXmlResultAndHtmlReportIntegrationTest extends
 
     def "produces JUnit xml results when running tests in parallel - #mode.name"() {
         when:
-        runWithTestConfig("useTestNG(); maxParallelForks 2; $mode.config")
+        runWithTestConfig("useTestNG(); maxParallelForks = 2; $mode.config")
 
         then:
         verify(mode)
@@ -77,7 +77,7 @@ class TestNGXmlResultAndHtmlReportIntegrationTest extends
 
     def "produces JUnit xml results with aggressive forking - #mode.name"() {
         when:
-        runWithTestConfig("useTestNG(); forkEvery 1; $mode.config")
+        runWithTestConfig("useTestNG(); forkEvery = 1; $mode.config")
 
         then:
         verify(mode)

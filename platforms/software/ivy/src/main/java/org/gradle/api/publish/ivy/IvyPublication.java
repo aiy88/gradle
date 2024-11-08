@@ -81,9 +81,9 @@ import org.gradle.internal.instrumentation.api.annotations.ReplacesEagerProperty
  *     myPublication(IvyPublication) {
  *       from components.java
  *       artifact(sourceJar) {
- *         type "source"
- *         extension "src.jar"
- *         conf "runtime"
+ *         type = "source"
+ *         extension = "src.jar"
+ *         conf = "runtime"
  *       }
  *       descriptor {
  *         license {
