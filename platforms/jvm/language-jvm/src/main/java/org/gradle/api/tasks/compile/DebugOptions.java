@@ -16,24 +16,24 @@
 
 package org.gradle.api.tasks.compile;
 
+import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
-import org.gradle.internal.instrumentation.api.annotations.ToBeReplacedByLazyProperty;
+import org.gradle.internal.instrumentation.api.annotations.ReplacesEagerProperty;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Debug options for Java compilation. Only take effect if {@link CompileOptions#debug}
  * is set to {@code true}.
  */
 @SuppressWarnings("deprecation")
-public class DebugOptions extends AbstractOptions {
+public abstract class DebugOptions extends AbstractOptions {
     private static final long serialVersionUID = 0;
-
-    private String debugLevel;
-
     /**
-     * Get a comma-separated list of debug information to be generated during compilation.
+     * A comma-separated list of debug information to be generated during compilation.
      * The list may contain any of the following keywords (without spaces in between):
      *
      * <dl>
@@ -49,35 +49,23 @@ public class DebugOptions extends AbstractOptions {
      *
      * <p>When the value is null, only source and line debugging information will be generated.</p>
      */
-    @Nullable
     @Optional
     @Input
-    @ToBeReplacedByLazyProperty
-    public String getDebugLevel() {
-        return debugLevel;
-    }
+    @ReplacesEagerProperty
+    public abstract Property<String> getDebugLevel();
 
-    /**
-     * Sets which debug information is to be generated during compilation. The value must be a
-     * comma-separated list containing any of the following keywords (without spaces in between):
-     *
-     * <dl>
-     *     <dt>{@code source}
-     *     <dd>Source file debugging information
-     *     <dt>{@code lines}
-     *     <dd>Line number debugging information
-     *     <dt>{@code vars}
-     *     <dd>Local variable debugging information
-     * </dl>
-     *
-     * <p>For example {@code source,lines,vars} is a valid value.</p>
-     *
-     * <p>Alternatively setting the value to {@code none} will disable debug information generation.</p>
-     *
-     * <p>Setting this value to null will reset the property to its default value of only
-     * generating line and source debug information.</p>
-     */
-    public void setDebugLevel(@Nullable String debugLevel) {
-        this.debugLevel = debugLevel;
+    @Override
+    public void define(@Nullable Map<String, Object> args) {
+        // The AbstractOptions.define(Map) expects eager properties but debugOptions is now a lazy property
+        if (args == null) {
+            return;
+        }
+        Map<String, Object> mutableArgs = new HashMap<>(args);
+        Object debugLevel = mutableArgs.remove("debugLevel");
+        if (debugLevel != null) {
+            getDebugLevel().set(debugLevel.toString());
+        }
+
+        super.define(mutableArgs);
     }
 }
