@@ -637,6 +637,12 @@ public interface Task extends Comparable<Task>, ExtensionAware, Named {
      */
     void setGroup(@Nullable String group);
 
+    // For backward compatibility with JMH plugin
+    @Deprecated
+    default void group(@Nullable String group) {
+        setGroup(group);
+    }
+
     /**
      * <p>Returns the inputs of this task.</p>
      *
