@@ -31,6 +31,7 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.internal.deprecation.DeprecationLogger;
+import org.gradle.internal.instrumentation.api.annotations.ReplacesEagerProperty;
 import org.gradle.internal.instrumentation.api.annotations.ToBeReplacedByLazyProperty;
 import org.gradle.internal.nativeintegration.filesystem.FileSystem;
 import org.gradle.internal.reflect.Instantiator;
@@ -56,7 +57,6 @@ public abstract class AbstractArchiveTask extends AbstractCopyTask {
     private final Property<String> archiveVersion;
     private final Property<String> archiveExtension;
     private final Property<String> archiveClassifier;
-    private final Property<Boolean> archivePreserveFileTimestamps;
     private final Property<Boolean> archiveReproducibleFileOrder;
 
     public AbstractArchiveTask() {
@@ -85,7 +85,7 @@ public abstract class AbstractArchiveTask extends AbstractCopyTask {
         archiveFile = objectFactory.fileProperty();
         archiveFile.convention(archiveDestinationDirectory.file(archiveName));
 
-        archivePreserveFileTimestamps = objectFactory.property(Boolean.class).convention(true);
+        getPreserveFileTimestamps().convention(false);
         archiveReproducibleFileOrder = objectFactory.property(Boolean.class).convention(false);
     }
 
@@ -271,23 +271,8 @@ public abstract class AbstractArchiveTask extends AbstractCopyTask {
      * @since 3.4
      */
     @Input
-    @ToBeReplacedByLazyProperty
-    public boolean isPreserveFileTimestamps() {
-        return archivePreserveFileTimestamps.get();
-    }
-
-    /**
-     * Specifies whether file timestamps should be preserved in the archive.
-     * <p>
-     * If <code>false</code> this ensures that archive entries have the same time for builds between different machines, Java versions and operating systems.
-     * </p>
-     *
-     * @param preserveFileTimestamps <code>true</code> if file timestamps should be preserved for archive entries
-     * @since 3.4
-     */
-    public void setPreserveFileTimestamps(boolean preserveFileTimestamps) {
-        archivePreserveFileTimestamps.set(preserveFileTimestamps);
-    }
+    @ReplacesEagerProperty(originalType = boolean.class)
+    public abstract Property<Boolean> getPreserveFileTimestamps();
 
     /**
      * Specifies whether to enforce a reproducible file order when reading files from directories.
