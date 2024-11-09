@@ -16,10 +16,10 @@
 
 package org.gradle.composite.internal;
 
-import org.gradle.api.artifacts.component.ComponentSelector;
 import org.gradle.api.capabilities.Capability;
 import org.gradle.api.internal.artifacts.dsl.CapabilityNotationParserFactory;
-import org.gradle.api.internal.attributes.ImmutableAttributesFactory;
+import org.gradle.api.internal.artifacts.ivyservice.dependencysubstitution.ModuleSelectorNotationConverter;
+import org.gradle.api.internal.attributes.AttributesFactory;
 import org.gradle.api.internal.composite.CompositeBuildContext;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.composite.internal.plugins.CompositeBuildPluginResolverContributor;
@@ -58,6 +58,7 @@ public class CompositeBuildServices extends AbstractGradleModuleServices {
     }
 
     private static class CompositeBuildTreeScopeServices implements ServiceRegistrationProvider {
+        @Provides
         public void configure(ServiceRegistration serviceRegistration) {
             serviceRegistration.add(BuildStateFactory.class);
             serviceRegistration.add(DefaultIncludedBuildFactory.class);
@@ -70,8 +71,8 @@ public class CompositeBuildServices extends AbstractGradleModuleServices {
             CompositeBuildContext context,
             Instantiator instantiator,
             ObjectFactory objectFactory,
-            NotationParser<Object, ComponentSelector> moduleSelectorNotationParser,
-            ImmutableAttributesFactory attributesFactory
+            ModuleSelectorNotationConverter moduleSelectorNotationParser,
+            AttributesFactory attributesFactory
         ) {
             NotationParser<Object, Capability> capabilityNotationParser = new CapabilityNotationParserFactory(false).create();
             return new IncludedBuildDependencySubstitutionsBuilder(context, instantiator, objectFactory, attributesFactory, moduleSelectorNotationParser, capabilityNotationParser);

@@ -81,9 +81,9 @@ import org.gradle.api.internal.artifacts.result.DefaultResolutionResult;
 import org.gradle.api.internal.artifacts.result.MinimalResolutionResult;
 import org.gradle.api.internal.attributes.AttributeContainerInternal;
 import org.gradle.api.internal.attributes.AttributeDesugaring;
+import org.gradle.api.internal.attributes.AttributesFactory;
 import org.gradle.api.internal.attributes.FreezableAttributeContainer;
 import org.gradle.api.internal.attributes.ImmutableAttributes;
-import org.gradle.api.internal.attributes.ImmutableAttributesFactory;
 import org.gradle.api.internal.collections.DomainObjectCollectionFactory;
 import org.gradle.api.internal.file.AbstractFileCollection;
 import org.gradle.api.internal.file.FileCollectionFactory;
@@ -110,7 +110,6 @@ import org.gradle.internal.component.model.DependencyMetadata;
 import org.gradle.internal.component.model.LocalComponentDependencyMetadata;
 import org.gradle.internal.deprecation.DeprecationLogger;
 import org.gradle.internal.event.ListenerBroadcast;
-import org.gradle.internal.lazy.Lazy;
 import org.gradle.internal.logging.text.TreeFormatter;
 import org.gradle.internal.model.CalculatedModelValue;
 import org.gradle.internal.model.CalculatedValueContainerFactory;
@@ -188,6 +187,7 @@ public abstract class DefaultConfiguration extends AbstractFileCollection implem
     private final Set<MutationValidator> childMutationValidators = new HashSet<>();
     private final MutationValidator parentMutationValidator = DefaultConfiguration.this::validateParentMutation;
     private final RootComponentMetadataBuilder rootComponentMetadataBuilder;
+    private RootComponentMetadataBuilder.RootComponentState rootComponentState;
     private final ConfigurationsProvider configurationsProvider;
 
     private final Path identityPath;
@@ -220,7 +220,7 @@ public abstract class DefaultConfiguration extends AbstractFileCollection implem
     private boolean observed = false;
     private final FreezableAttributeContainer configurationAttributes;
     private final DomainObjectContext domainObjectContext;
-    private final ImmutableAttributesFactory attributesFactory;
+    private final AttributesFactory attributesFactory;
     private final ResolutionAccess resolutionAccess;
     private FileCollectionInternal intrinsicFiles;
 
@@ -228,7 +228,6 @@ public abstract class DefaultConfiguration extends AbstractFileCollection implem
     private final UserCodeApplicationContext userCodeApplicationContext;
     private final WorkerThreadRegistry workerThreadRegistry;
     private final DomainObjectCollectionFactory domainObjectCollectionFactory;
-    private final Lazy<List<? extends DependencyMetadata>> syntheticDependencies = Lazy.unsafe().of(this::generateSyntheticDependencies);
 
     private final AtomicInteger copyCount = new AtomicInteger();
 
@@ -258,7 +257,7 @@ public abstract class DefaultConfiguration extends AbstractFileCollection implem
         Instantiator instantiator,
         NotationParser<Object, ConfigurablePublishArtifact> artifactNotationParser,
         NotationParser<Object, Capability> capabilityNotationParser,
-        ImmutableAttributesFactory attributesFactory,
+        AttributesFactory attributesFactory,
         RootComponentMetadataBuilder rootComponentMetadataBuilder,
         ResolveExceptionMapper exceptionMapper,
         AttributeDesugaring attributeDesugaring,
@@ -797,6 +796,7 @@ public abstract class DefaultConfiguration extends AbstractFileCollection implem
                 ResolverResults results;
                 try {
                     results = resolver.resolveGraph(DefaultConfiguration.this);
+                    DefaultConfiguration.this.rootComponentState = null;
                 } catch (Exception e) {
                     throw exceptionMapper.mapFailure(e, "dependencies", displayName.getDisplayName());
                 }
@@ -951,6 +951,7 @@ public abstract class DefaultConfiguration extends AbstractFileCollection implem
 
             // Reset this configuration to an unresolved state
             currentResolveState.set(Optional.empty());
+            rootComponentState = null;
 
             return value;
         } finally {
@@ -1002,12 +1003,6 @@ public abstract class DefaultConfiguration extends AbstractFileCollection implem
             initAllDependencies();
         }
         return allDependencies;
-    }
-
-    @Override
-    public boolean hasDependencies() {
-        runDependencyActions();
-        return !getAllDependencies().isEmpty();
     }
 
     private synchronized void initAllDependencies() {
@@ -1135,6 +1130,11 @@ public abstract class DefaultConfiguration extends AbstractFileCollection implem
     @Override
     public String getDisplayName() {
         return displayName.getDisplayName();
+    }
+
+    @Override
+    public DisplayName asDescribable() {
+        return displayName;
     }
 
     @Override
@@ -1329,13 +1329,10 @@ public abstract class DefaultConfiguration extends AbstractFileCollection implem
     @Override
     public RootComponentMetadataBuilder.RootComponentState toRootComponent() {
         warnOnInvalidInternalAPIUsage("toRootComponent()", ProperMethodUsage.RESOLVABLE);
-        return rootComponentMetadataBuilder.toRootComponent(getName());
-    }
-
-    @Override
-    public List<? extends DependencyMetadata> getSyntheticDependencies() {
-        warnOnInvalidInternalAPIUsage("getSyntheticDependencies()", ProperMethodUsage.RESOLVABLE);
-        return syntheticDependencies.get();
+        if (rootComponentState == null) {
+            rootComponentState = rootComponentMetadataBuilder.toRootComponent(getName());
+        }
+        return rootComponentState;
     }
 
     @Override
@@ -1343,7 +1340,9 @@ public abstract class DefaultConfiguration extends AbstractFileCollection implem
         return name;
     }
 
-    private List<? extends DependencyMetadata> generateSyntheticDependencies() {
+    @Override
+    public List<? extends DependencyMetadata> getSyntheticDependencies() {
+        warnOnInvalidInternalAPIUsage("getSyntheticDependencies()", ProperMethodUsage.RESOLVABLE);
         Stream<LocalComponentDependencyMetadata> dependencyLockingConstraintMetadata = Stream.empty();
         if (getResolutionStrategy().isDependencyLockingEnabled()) {
             DependencyLockingState dependencyLockingState = dependencyLockingProvider.loadLockState(getDependencyLockingId(), displayName);

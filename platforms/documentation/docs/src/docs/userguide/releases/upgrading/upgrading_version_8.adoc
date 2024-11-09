@@ -35,6 +35,35 @@ The previous step will help you identify potential problems by issuing deprecati
 . Run `gradle wrapper --gradle-version {gradleVersion}` to update the project to {gradleVersion}.
 . Try to run the project and debug any errors using the <<troubleshooting.adoc#troubleshooting, Troubleshooting Guide>>.
 
+[[changes_8.12]]
+== Upgrading from 8.11 and earlier
+
+=== Potential breaking changes
+
+==== Upgrade to Kotlin 2.0.21
+
+The embedded Kotlin has been updated from 2.0.20 to link:https://github.com/JetBrains/kotlin/releases/tag/v2.0.21[Kotlin 2.0.21].
+
+==== Upgrade to Ant 1.10.15
+
+Ant has been updated to https://github.com/apache/ant/blob/rel/1.10.15/WHATSNEW[Ant 1.10.15].
+
+=== Deprecations
+
+[[init_must_run_alone]]
+==== `init` must run alone
+The <<build_init_plugin.adoc#sec:build_init_tasks, `init` task>> must run by itself.
+This task should not be combined with other tasks in a single Gradle invocation.
+
+Running `init` in the same invocation as other tasks will become an error in Gradle 9.0.
+
+For instance, this wil *not* be allowed:
+
+[source]
+----
+> gradlew init tasks
+----
+
 [[changes_8.11]]
 == Upgrading from 8.10 and earlier
 
@@ -1867,7 +1896,7 @@ Current usages of these methods should migrate to `link:{javadocPath}/org/gradle
 [[deprecated_configuration_usage]]
 ==== Using configurations incorrectly
 
-Gradle will now warn at runtime when methods of link:{javadocPath}/org/gradle/api/artifacts/Configuration.html--[Configuration] are called inconsistently with the configuration's intended usage.
+Gradle will now warn at runtime when methods of link:{javadocPath}/org/gradle/api/artifacts/Configuration.html[Configuration] are called inconsistently with the configuration's intended usage.
 
 This change is part of a larger ongoing effort to make the intended behavior of configurations more consistent and predictable and to unlock further speed and memory improvements.
 

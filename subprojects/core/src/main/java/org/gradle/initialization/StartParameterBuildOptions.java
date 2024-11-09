@@ -17,7 +17,6 @@
 package org.gradle.initialization;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
 import org.gradle.api.Transformer;
 import org.gradle.api.artifacts.verification.DependencyVerificationMode;
 import org.gradle.api.internal.StartParameterInternal;
@@ -37,12 +36,13 @@ import org.gradle.internal.watch.registry.WatchMode;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class StartParameterBuildOptions extends BuildOptionSet<StartParameterInternal> {
 
-    private static List<BuildOption<StartParameterInternal>> options = ImmutableList.of(
+    private static List<BuildOption<StartParameterInternal>> options = Arrays.asList(
         new ProjectCacheDirOption(),
         new RerunTasksOption(),
         new ProfileOption(),
@@ -60,7 +60,6 @@ public class StartParameterBuildOptions extends BuildOptionSet<StartParameterInt
         new BuildCacheOption(),
         new BuildCacheDebugLoggingOption(),
         new WatchFileSystemOption(),
-        new WatchFileSystemDebugLoggingOption(),
         new VfsVerboseLoggingOption(),
         new BuildScanOption(),
         new DependencyLockingWriteOption(),
@@ -316,19 +315,6 @@ public class StartParameterBuildOptions extends BuildOptionSet<StartParameterInt
                 ? WatchMode.ENABLED
                 : WatchMode.DISABLED
             );
-        }
-    }
-
-    public static class WatchFileSystemDebugLoggingOption extends BooleanBuildOption<StartParameterInternal> {
-        public static final String GRADLE_PROPERTY = "org.gradle.vfs.watch.debug";
-
-        public WatchFileSystemDebugLoggingOption() {
-            super(GRADLE_PROPERTY);
-        }
-
-        @Override
-        public void applyTo(boolean value, StartParameterInternal startParameter, Origin origin) {
-            startParameter.setWatchFileSystemDebugLogging(value);
         }
     }
 

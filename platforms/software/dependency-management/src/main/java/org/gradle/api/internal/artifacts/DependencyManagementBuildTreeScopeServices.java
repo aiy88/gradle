@@ -50,9 +50,12 @@ import org.gradle.api.internal.artifacts.ivyservice.modulecache.dynamicversions.
 import org.gradle.api.internal.artifacts.ivyservice.modulecache.dynamicversions.InMemoryModuleVersionsCache;
 import org.gradle.api.internal.artifacts.ivyservice.modulecache.dynamicversions.ReadOnlyModuleVersionsCache;
 import org.gradle.api.internal.artifacts.ivyservice.modulecache.dynamicversions.TwoStageModuleVersionsCache;
+import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.DefaultLocalVariantGraphResolveStateBuilder;
+import org.gradle.api.internal.artifacts.ivyservice.moduleconverter.dependencies.LocalVariantGraphResolveStateBuilder;
 import org.gradle.api.internal.artifacts.ivyservice.projectmodule.DefaultProjectLocalComponentProvider;
 import org.gradle.api.internal.artifacts.ivyservice.projectmodule.DefaultProjectPublicationRegistry;
 import org.gradle.api.internal.artifacts.ivyservice.projectmodule.ProjectArtifactResolver;
+import org.gradle.api.internal.artifacts.ivyservice.resolveengine.artifact.VariantArtifactSetCache;
 import org.gradle.api.internal.artifacts.ivyservice.resolveengine.result.AdhocHandlingComponentResultSerializer;
 import org.gradle.api.internal.artifacts.ivyservice.resolveengine.result.AttributeContainerSerializer;
 import org.gradle.api.internal.artifacts.ivyservice.resolveengine.result.CompleteComponentResultSerializer;
@@ -112,6 +115,8 @@ class DependencyManagementBuildTreeScopeServices implements ServiceRegistrationP
         registration.add(ConnectionFailureRepositoryDisabler.class);
         registration.add(DefaultProjectLocalComponentProvider.class);
         registration.add(DefaultProjectPublicationRegistry.class);
+        registration.add(LocalVariantGraphResolveStateBuilder.class, DefaultLocalVariantGraphResolveStateBuilder.class);
+        registration.add(VariantArtifactSetCache.class);
     }
 
     @Provides
